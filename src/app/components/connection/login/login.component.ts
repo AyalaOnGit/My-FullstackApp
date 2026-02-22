@@ -49,7 +49,7 @@ export class LoginComponent {
         this.router.navigate(['/home']); 
       }
       else{
-        alert("פרטים לא נכונים. לקוחות חדשים?")
+        alert("?פרטים לא נכונים. לקוחות חדשים")
       }  
     }
     else{

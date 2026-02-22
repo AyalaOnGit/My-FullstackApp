@@ -83,4 +83,13 @@ export class Header implements OnInit {
       }
     ];
   }
+
+  //for admin
+  addNewProduct(){
+    
+    const productId=0;
+    console.log("Navigating to product with ID:", productId);
+
+    this.router.navigate(['/products', productId]);
+  }
 }

@@ -29,18 +29,17 @@
 
 }
 
-
 .real-img {
-    width: 100%;
-    max-width: 450px; /* מגביל רוחב מקסימלי */
-    max-height: 500px; /* מגביל גובה מקסימלי */
-    object-fit: contain; /* שומר על פרופורציות בלי לחתוך את התמונה */
-    background-color: #f4f4f4; /* רקע עדין למקרה שהתמונה קטנה מדי */
+    /* הגדרת גודל קבוע וזהה לכל התמונות */
+    width: 450px; 
+    height: 500px; 
+    object-fit: cover; 
+    
+    background-color: #f4f4f4; 
     box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
     border-radius: 5px;
     display: block;
-    margin: 0 auto; /* מרכז את התמונה */
-    margin-top: 10px;
+    margin: 10px auto 0; 
 }
 
 .right-side {

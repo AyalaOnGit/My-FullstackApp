@@ -1,11 +1,15 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { UserDTO } from '../models/user.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
+
+  private http = inject(HttpClient);
+  private apiUrl = 'https://localhost:44324/api/Users';
   currentUser= signal<UserDTO | null> (this.getSavedUser());
 
 

@@ -55,7 +55,7 @@ export class ProductsPage implements OnInit{
         name: item.ProductName,      
         price: item.price,
         imageUrl: item.imageUrl,
-        category: item.CategoryDTO?.CategoryName,
+        category: item.CategoryDTO?.categoryName,
         popularColor: item.popularColor
       }));
 

@@ -3,6 +3,8 @@ import { FormGroup, ReactiveFormsModule,FormControl, Validators, AbstractControl
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Header } from '../../header1/header';
+import { UserService } from '../../../services/user.service';
+import { UserDTO } from '../../../models/user.model';
 
 
 @Component({
@@ -15,6 +17,7 @@ import { Header } from '../../header1/header';
 })
 export class RegisterComponent {
 
+  private userService = inject(UserService);
   private router=inject(Router);
   @Output() switchMode=new EventEmitter<void>();
   switchToLogin(){
@@ -43,11 +46,30 @@ export class RegisterComponent {
 
   onSubmit(){
     if(this.registerForm.valid){
-      console.log(this.registerForm.value);
-      this.router.navigate(['/home']); 
+      const formValues=this.registerForm.value;
 
-            //קריאה לשרת
+      const newUser: UserDTO = 
+      {
+        UserId: 0,
+        UserEmail: formValues.email,
+        UserFirstName: formValues.firstName,
+        UserLastName: formValues.lastName,
+        Role: 'user'
+      };
+      
+      const password = formValues.password;
 
+      //קריאה לשרת
+      this.userService.register(newUser,password).subscribe
+      ({
+        next: (user)=>{
+          console.log('Registration successful',user);
+          this.router.navigate(['/home']); 
+        },
+        error: (err)=>{
+          alert(err.error || 'שגיאה ברישום המשתמש');
+        }
+      });
     }
     else{
     this.registerForm.markAllAsTouched();  

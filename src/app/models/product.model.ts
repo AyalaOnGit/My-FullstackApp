@@ -19,7 +19,7 @@ export interface ProductDTO{
         price: number;
         imageUrl: string;
         Description: string;
-        CategoryDTO:CategoryDTO;
+        CategoryDTO:Category;
 
         colors: string[];      
         popularColor?: string; 
@@ -27,6 +27,6 @@ export interface ProductDTO{
         customText?: string;
 }
 
-export interface CategoryDTO{
-        CategoryName: string;
+export interface Category{
+        categoryName: string;
 }

@@ -1,22 +1,26 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Category } from '../models/category'; // ייבוא המודל
 
+import { HttpClient } from '@angular/common/http'; 
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
   // הנתונים הסטטיים שלך עוברים לכאן
-  private categories: Category[] = [
-    { label: 'כל הקטגוריות', value: 'all' },
-    { label: 'שתייה חמה', value: 'שתייה חמה' },
-    { label: 'מאפים', value: 'מאפים' }
-  ];
+  // private categories: Category[] = [
+  //   { label: 'כל הקטגוריות', value: 'all' },
+  //   { label: 'שתייה חמה', value: 'שתייה חמה' },
+  //   { label: 'מאפים', value: 'מאפים' }
+  // ];
+
+  private http = inject(HttpClient);
+  private categoriesApiUrl=`${environment.apiUrl}/Categories`;
 
   constructor() {}
 
-  // הפונקציה הזו "מזייפת" קריאת שרת
   getCategories(): Observable<Category[]> {
-    return of(this.categories);
+    return this.http.get<Category[]>(this.categoriesApiUrl);
   }
 }

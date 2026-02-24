@@ -54,16 +54,34 @@ export class UserService {
 
   constructor() { }
 
-  //עוד מעט נעבוד על זה בעזרת השם יתברך
-  login(email: string, password: string): boolean {
-    const user = this.users.find(u => u.UserEmail === email);
-    if (user) {
-      this.currentUser.set(user);
-      localStorage.setItem('loggedUser', JSON.stringify(user)); // שמירה בזיכרון הדפדפן
-      return true; // כניסה מוצלחת
-    }
-    return false; // כניסה נכשלה}
+  // בדיקת חוזק סיסמא
+  checkPasswordStrength(password:string):Observable<{thePassword:string, level:number}>{
+    const body={thePassword:password};
+
+    return this.http.post<{thePassword:string, level:number}>(
+      `${environment.apiUrl}/Password`,
+      body
+    );
+  }
+
+  login(email: string, password: string): Observable<UserDTO | null> {
+  // בניית האובייקט בדיוק לפי ה-DTO שהשרת מצפה לו
+  const loginData = {
+    userEmail: email,
+    userPassword: password
+  };
+
+  return this.http.post<UserDTO>(`${this.apiUrl}/login`, loginData).pipe(
+    tap(user => {
+      if (user) {
+        this.currentUser.set(user);
+        localStorage.setItem('loggedUser', JSON.stringify(user));
+      }
+    })
+  );
 }
+
+  //עוד מעט נעבוד על זה בעזרת השם יתברך
 logout() {
     this.currentUser.set(null);
     localStorage.removeItem('loggedUser'); // הסרת המשתמש מהזיכרון הדפדפן

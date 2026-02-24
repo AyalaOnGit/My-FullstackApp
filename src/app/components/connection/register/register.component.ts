@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Header } from '../../header1/header';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/user.model';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 
 @Component({
@@ -24,6 +25,13 @@ export class RegisterComponent {
     this.switchMode.emit();
   }
   
+  showPassword: boolean = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  
   registerForm !:FormGroup;
 
   ngOnInit(): void {
@@ -34,6 +42,12 @@ export class RegisterComponent {
       'password': new FormControl(null, [Validators.required, Validators.minLength(8)]),
       'confirmPassword': new FormControl(null, [Validators.required])
     },{validators: [this.passwordMatchValidator]});
+
+    this.registerForm.get('password')?.valueChanges.pipe(
+      debounceTime(20),
+      distinctUntilChanged()).subscribe(value=>{
+        this.checkPasswordStrength();
+      });
   }
 
   
@@ -107,15 +121,15 @@ checkPasswordStrength() {
     return;
   }
 
-  // סימולציה של בדיקת חוזק (לפי אורך הסיסמה בינתיים)
-  // כשתתחברי לשרת, כאן תבוא הקריאה ל-http.post
-  let score = 0;
-  if (password.length > 3) score = 30;
-  if (password.length > 6) score = 60;
-  if (password.length > 9) score = 100;
-
-  this.strength = score;
-  this.updateColor(score);
+  this.userService.checkPasswordStrength(password).subscribe({
+    next: (res)=>{
+      this.strength=res.level*25;
+      this.updateColor(this.strength);
+    },
+    error: (err)=>{
+      console.error('Password check failed',err)
+    }
+  });
 }
 
 updateColor(score: number) {

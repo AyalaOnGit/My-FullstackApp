@@ -19,6 +19,10 @@
   flex-direction: column;
   gap: 8px;
 }
+.passStre{
+    margin-top: 0;
+
+}
 
 .check-btn {
     background-color: #6fbab7; /* צבע טורקיז כהה יותר כמו בתמונה */
@@ -57,4 +61,39 @@
 .the-page{
     padding-top: 0vh !important;
     height: 110vh !important;
+}
+
+
+/* הקונטיינר שעוטף את האינפוט והעין */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* עיצוב האינפוט כדי שלא יתנגש עם העין */
+.password-wrapper input {
+    width: 100%;
+    padding-left: 40px; /* רווח פנימי משמאל בשביל העין */
+}
+
+/* הכפתור של העין */
+.toggle-password {
+    position: absolute;
+    left: 10px; /* הצמדה לשמאל */
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    z-index: 2; /* לוודא שהוא מעל האינפוט */
+}
+
+.toggle-password:hover {
+    opacity: 0.7;
 }

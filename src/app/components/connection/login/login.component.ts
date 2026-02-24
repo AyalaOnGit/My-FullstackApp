@@ -32,28 +32,33 @@ export class LoginComponent {
     });
   }
 
-  onSubmit(){
-    if(this.loginForm.valid){
-      console.log(this.loginForm.value);
+  onSubmit() {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
 
-      const {email, password}=this.loginForm.value;
-
-      if(this.userService.login(email, password)){
-        if(this.userService.isAdmin()){
-          console.log("ברוך הבא אדמין!");
+      this.userService.login(email, password).subscribe({
+        next: (user) => {
+          if (user) {
+            // בדיקה אם אדמין דרך הסיגנל המחושב בסרביס
+            if (this.userService.isAdmin()) {
+              console.log("ברוך הבא אדמין!");
+            } else {
+              console.log("ברוך הבא לקוח!");
+            }
+            this.router.navigate(['/home']);
+          } else {
+            // השרת החזיר NoContent (204) - כלומר המשתמש לא נמצא
+            alert("פרטים לא נכונים. אולי כדאי להירשם?");
+          }
+        },
+        error: (err) => {
+          console.error("Login error:", err);
+          alert("אירעה שגיאה בחיבור לשרת.");
         }
-        else{
-          console.log("ברוך הבא לקוח!");
-        }
-
-        this.router.navigate(['/home']); 
-      }
-      else{
-        alert("?פרטים לא נכונים. לקוחות חדשים")
-      }  
-    }
-    else{
-    this.loginForm.markAllAsTouched();  
+      });
+    } else {
+      this.loginForm.markAllAsTouched();
     }
   }
+
 }

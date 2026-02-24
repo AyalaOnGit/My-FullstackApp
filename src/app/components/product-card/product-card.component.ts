@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductDTO } from '../../models/product.model';
-import { ProductsService } from '../../services/products.service';
+import { ProductService } from '../../services/product';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Router, RouterModule } from '@angular/router';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   styleUrl: './product-card.component.css'
 })
 export class ProductCardComponent {
-  private productService=inject(ProductsService);
+  private productService=inject(ProductService);
   private router=inject(ActivatedRoute);
   private router2=inject(Router)
   private orderService=inject(OrderService);
@@ -31,38 +31,40 @@ export class ProductCardComponent {
   currentProduct!: ProductDTO;
 
   productId :number=1;
-  ngOnInit(){
-
+  ngOnInit() {
     const idFromRoute = this.router.snapshot.paramMap.get('id');
-    this.productId = idFromRoute ? Number(idFromRoute) :0;
-
-    //יצירת מוצר חדש
-    if(this.productId===0)
-    {
-      this.isEditing=true;
-      this.productName='';
-      this.productPrice=0;
-      this.productDescription='';
-      this.productImage='assets/placeholder.jpg';
-      this.colors=[];
+    this.productId = idFromRoute ? Number(idFromRoute) : 0;
+  
+    if (this.productId === 0) {
+      this.isEditing = true;
+      this.productName = '';
+      this.productPrice = 0;
+      this.productDescription = '';
+      this.productImage = 'assets/placeholder.jpg';
+      this.colors = [];
+    } else {
+      // קריאה לשרת - אנחנו נרשמים (subscribe) כדי לקבל את המוצר כשיגיע
+      this.productService.getProductById(this.productId).subscribe({
+        next: (product) => {
+          // עכשיו 'product' הוא אובייקט מסוג ProductDTO אמיתי
+          this.currentProduct = product;
+          
+          this.productName = product.productName;
+          this.productPrice = product.price;
+          this.productImage = product.imageUrl ?? 'assets/images/default-product.png';
+          this.productDescription = product.description ?? 'אין תיאור זמין למוצר זה';
+          this.colors = [...product.colors];
+  
+          this.selectedColor = '';
+          this.userText = '';
+          this.showToast = false;
+        },
+        error: (err) => {
+          console.error('שגיאה בטעינת המוצר:', err);
+          // כאן כדאי להוסיף ניווט חזרה או הודעת שגיאה למשתמש
+        }
+      });
     }
-
-    else{
-
-      this.currentProduct=this.productService.getProductById(this.productId)!;
-      
-      this.productName= this.currentProduct.ProductName;
-      this.productPrice= this.currentProduct.price;
-      this.productImage= this.currentProduct.imageUrl;
-      this.productDescription= this.currentProduct.Description;
-
-      this.colors=[...this.currentProduct.colors]
-
-      this.selectedColor='';
-      this.userText= '';
-      this.showToast= false;
-    }
-
   }
 
   productName: string = 'מוצר לדוגמא';
@@ -175,20 +177,29 @@ export class ProductCardComponent {
     
 
 
+
     const updatedData: ProductDTO = {
       ...this.currentProduct,
-      ProductName: this.productName,
+      productName: this.productName,
       price: this.productPrice,
-      Description: this.productDescription,
+      description: this.productDescription,
       imageUrl: this.productImage,
       colors: [...this.colors]
     };
-
-    this.productService.updateProduct(updatedData);
-    this.currentProduct=updatedData;
-
-    this.isEditing=false;
-    Swal.fire('!נשמר', 'פרטי המוצר עודכנו בהצלחה', 'success'); 
+    
+    // תיקון הקריאה: העברת ה-ID כפרמטר ראשון והרשמה (subscribe) לבקשה
+    this.productService.updateProduct(this.productId, updatedData).subscribe({
+      next: (response) => {
+        // עדכון מקומי רק לאחר הצלחת הבקשה בשרת
+        this.currentProduct = response; 
+        this.isEditing = false;
+        Swal.fire('!נשמר', 'פרטי המוצר עודכנו בהצלחה', 'success');
+      },
+      error: (err) => {
+        console.error('שגיאה בעדכון המוצר:', err);
+        Swal.fire('אופס...', 'העדכון נכשל, נסה שנית מאוחר יותר', 'error');
+      }
+    });
   }
 
   onFileSelect(event:any){
@@ -250,10 +261,10 @@ export class ProductCardComponent {
   }).then((result) => {
     if (result.isConfirmed) {
       // החזרת כל המשתנים לערכים המקוריים מהאובייקט שנמשך מה-Service
-      this.productName = this.currentProduct.ProductName;
+      this.productName = this.currentProduct.productName;
       this.productPrice = this.currentProduct.price;
-      this.productDescription = this.currentProduct.Description;
-      this.productImage = this.currentProduct.imageUrl;
+      this.productDescription = this.currentProduct.description??'אין תיאור זמין למוצר זה';
+      this.productImage = this.currentProduct.imageUrl??'assets/images/default-product.png';
       this.colors = [...this.currentProduct.colors]; // חשוב: ליצור העתק חדש!
 
       Swal.fire('שוחזר!', 'הנתונים חזרו לברירת המחדל.', 'success');
@@ -278,7 +289,7 @@ export class ProductCardComponent {
         const statuses=this.orderService.getStatuses();
         const shippedIndex=statuses.indexOf('נשלח');
 
-        const ordersWithProduct=this.orderService.getOrdersByProductId(this.currentProduct.ProductId);
+        const ordersWithProduct=this.orderService.getOrdersByProductId(this.currentProduct.productId);
         console.log(ordersWithProduct);
         const HasPandingOrders=ordersWithProduct?.find(order=>statuses.indexOf(order.status)<shippedIndex);
 
@@ -295,7 +306,7 @@ export class ProductCardComponent {
           return;
         }
         else{
-            this.productService.deleteProduct(this.currentProduct.ProductId);
+            this.productService.deleteProduct(this.currentProduct.productId);
             Swal.fire({
               title: 'הפעולה הצליחה',
               text: 'המוצר נמחק מהמערכת',

@@ -47,3 +47,54 @@
 //     // height: 500px;
 //     // width: 400px;
 // }
+
+/* הגדרת גובה קבוע לכרטיס */
+:host ::ng-deep .custom-card {
+  height: 100%; /* מאפשר לכרטיס למלא את גובה העמודה שלו */
+  display: flex;
+  flex-direction: column;
+}
+
+:host ::ng-deep .p-card {
+  height: 100%; /* שהכרטיס הפנימי יתפוס את כל הגובה */
+  display: flex;
+  flex-direction: column;
+  
+  /* הופך את גוף הכרטיס לגמיש כדי שידחוף את הפוטר למטה */
+  .p-card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* דוחף את התוכן למעלה ואת הפוטר למטה */
+  }
+
+  .p-card-content {
+      flex-grow: 1; /* דואג שמרכז הכרטיס יתפוס את השטח הנותר */
+      padding-top: 0;
+  }
+  
+  .p-card-header {
+      padding: 0;
+      margin: 0;
+  }
+}
+
+.product-image-container {
+  width: 100%;
+  height: 250px; /* גובה קבוע לתמונה */
+  overflow: hidden;
+  background-color: var(--surface-100);
+  border-radius: 6px 6px 0 0;
+
+  .product-full-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* חותך את התמונה במקום למתוח אותה */
+      transition: transform 0.3s ease;
+      display: block;
+  }
+}
+
+.custom-card:hover .product-full-image {
+  transform: scale(1.05);
+}

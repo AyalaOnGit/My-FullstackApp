@@ -50,16 +50,7 @@ export class ProductCardMin implements OnInit{
   @Input() product: CartItem | null = null; // שימוש במודל במקום כתיבת אובייקט ארוך
 
   @Output() edit = new EventEmitter<CartItem>(); // מאפשר לאבא לדעת שלחצו על עריכה
-  // @Input() product: { 
-  //   id?: number;
-  //   name: string; 
-  //   price: number; 
-  //   imageUrl: string; 
-  //   popularColor?: string;
-  //   topText?: string;
-  //   color?: string;
-  //   customText?: string;
-  // } | null = null;
+  
   onEdit() {
     if (this.product) {
       this.edit.emit(this.product); // שליחת המוצר לקומפוננטת האב לעריכה

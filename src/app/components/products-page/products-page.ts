@@ -9,7 +9,8 @@ import { Cart } from '../../services/cart';
 import { CartItem } from '../../models/product';
 import { Header } from '../header1/header';
 import { Footer1 } from '../footer1/footer';
-import { ProductsService } from '../../services/products.service';
+import { ProductService } from '../../services/product';
+import {  ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-products-page',
@@ -19,9 +20,10 @@ import { ProductsService } from '../../services/products.service';
   styleUrl: './products-page.scss',
 })
 export class ProductsPage implements OnInit{
-  private productService = inject(ProductsService);
+  private productService = inject(ProductService);
   private router = inject(Router);
   public cart = inject(Cart);
+  private cdr = inject(ChangeDetectorRef);
 
   productList: CartItem[] = [];
   filteredList: CartItem[] = [];
@@ -42,28 +44,30 @@ export class ProductsPage implements OnInit{
   //     this.filteredList = [...this.productList];
   //   });
   // }
-
   loadProducts() {
-  this.productService.getProducts().subscribe((dataSignal) => {
-    // 1. חילוץ המערך מתוך ה-Signal (כי dataSignal הוא Signal)
-    const data = dataSignal(); 
-
-    // 2. מיפוי הנתונים ל-CartItem
-    if (data && Array.isArray(data)) {
-      this.productList = data.map(item => ({
-        id: item.ProductId,          
-        name: item.ProductName,      
-        price: item.price,
-        imageUrl: item.imageUrl,
-        category: item.CategoryDTO?.categoryName,
-        popularColor: item.popularColor
-      }));
-
-      this.filteredList = [...this.productList];
-      console.log('Successfully loaded products:', this.productList);
-    }
-  });
-}
+    this.productService.getProducts().subscribe((response: any) => {
+      const productsFromApi = response.data; 
+  
+      if (productsFromApi && Array.isArray(productsFromApi)) {
+        this.productList = productsFromApi.map(item => ({
+          id: item.productId || item.ProductId,
+          name: item.productName || item.ProductName,
+          price: item.price || item.Price,
+          imageUrl: (item.imageUrl || item.ImageUrl) ?? 'assets/images/no-image.png',
+          category: item.category?.categoryName || item.Category?.CategoryName || 'כללי',
+          popularColor: (item.colors && item.colors.length > 0) ? item.colors[0] : 'default'
+        }));
+  
+        this.filteredList = [...this.productList];
+        this.currentPage = 1; 
+        
+        // הוספת השורה הזו פותרת את הבעיה:
+        this.cdr.detectChanges(); 
+        
+        console.log('Products ready and view refreshed:', this.filteredList.length);
+      }
+    });
+  }
 
 
   // פונקציה חדשה שתטפל בלחיצה על עריכה מהכרטיס
@@ -73,6 +77,11 @@ export class ProductsPage implements OnInit{
   }
 
   filterProducts(filters: any) {
+    // אם הרשימה המקורית עדיין ריקה (השרת עוד לא ענה), אל תבצעי סינון
+    if (!this.productList || this.productList.length === 0) {
+      console.log('נתונים עדיין בטעינה, מתעלם מהסינון הראשוני');
+      return;
+    }
     this.currentPage = 1;
     this.filteredList = this.productList.filter(product => {
       // בדיקה אם השם מתאים
@@ -86,7 +95,9 @@ export class ProductsPage implements OnInit{
   
       // המוצר יוצג רק אם הוא עומד בכל התנאים
       return matchesName && matchesPrice && matchesCategory;
+      
     });
+    this.cdr.detectChanges(); // כדאי להוסיף גם כאן בסוף
   }
 
   // פונקציה שמחזירה רק את המוצרים של הדף הנוכחי

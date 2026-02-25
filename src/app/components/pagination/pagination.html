@@ -1,34 +1,46 @@
-
-<!-- <div class="flex flex-column gap-3" [@listAnimation]="pagedItems.length">
-    @for (item of pagedItems; track item.id) {
-      <p-card class="cart-item-card">
-         </p-card>
-    }
-  </div> -->
-  
-  @if (totalPages > 1) {
-    <div class="pagination-controls flex align-items-center justify-content-center gap-3 mt-4 p-3 bg-gray-50 border-round-pill shadow-1">
+@if (totalPages > 1) {
+  <div class="pagination-container flex flex-column align-items-center gap-2">
+    <div class="pagination-controls shadow-2 border-round-pill p-2 flex align-items-center justify-content-center gap-3">
+      
       <p-button 
+        icon="pi pi-angle-double-right" 
+        [disabled]="currentPage === 1" 
+        (click)="goToPage(1)"
+        styleClass="p-button-rounded p-button-text p-button-secondary">
+      </p-button>
+
+      <p-button 
+        label="הקודם"
         icon="pi pi-chevron-right" 
-        label="הקודם" 
         [disabled]="currentPage === 1" 
         (click)="goToPage(currentPage - 1)"
-        styleClass="p-button-text p-button-sm">
+        styleClass="p-button-rounded p-button-text font-bold">
       </p-button>
-  
-      <div class="flex align-items-center gap-2 font-medium">
-        <span class="text-primary font-bold">{{currentPage}}</span>
-        <span class="text-400">/</span>
-        <span>{{totalPages}}</span>
+
+      <div class="page-display flex align-items-center gap-2 px-3">
+        <span class="current-page text-primary font-bold text-xl">{{currentPage}}</span>
+        <span class="divider text-400">/</span>
+        <span class="total-pages font-medium text-700">{{totalPages}}</span>
       </div>
-  
+
       <p-button 
+        label="הבא"
         icon="pi pi-chevron-left" 
         iconPos="right"
-        label="הבא" 
         [disabled]="currentPage === totalPages" 
         (click)="goToPage(currentPage + 1)"
-        styleClass="p-button-text p-button-sm">
+        styleClass="p-button-rounded p-button-text font-bold">
       </p-button>
+
+      <p-button 
+        icon="pi pi-angle-double-left" 
+        [disabled]="currentPage === totalPages" 
+        (click)="goToPage(totalPages)"
+        styleClass="p-button-rounded p-button-text p-button-secondary">
+      </p-button>
+
     </div>
-  }
+    
+    <small class="text-500 font-italic">מציג דף {{currentPage}} מתוך {{totalPages}}</small>
+  </div>
+}

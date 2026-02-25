@@ -69,4 +69,14 @@ updateQuantity(product: any, delta: number) {
   get totalItemsCount(): number {
     return this.items.reduce((total, item) => total + item.quantity, 0);
   }
+  // בתוך קובץ cart.service.ts
+  clearCart() {
+    this.items = [];
+    this.saveToLocalStorage();
+  }
+
+  // פונקציית עזר לחישוב הסכום הכולל עבור השרת
+  getTotalSum(): number {
+    return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+  }
 }

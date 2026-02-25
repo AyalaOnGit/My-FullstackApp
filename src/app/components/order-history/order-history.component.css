@@ -1,145 +1,126 @@
-/* הגדרות כלליות לעמוד */
-.order-history-page {
+.order-history-container { max-width: 900px; margin: 40px auto; padding: 0 20px; direction: rtl; font-family: sans-serif; }
+
+/* כותרת */
+.page-header { text-align: center; margin-bottom: 40px; }
+.header-underline { width: 50px; height: 4px; background: #46d9e1; margin: 10px auto; border-radius: 2px; }
+
+/* כרטיס */
+.order-card { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 25px; overflow: hidden; border: 1px solid #eee; }
+
+.order-header { background: #fcfcfc; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+.order-number { font-weight: bold; color: #333; }
+.order-date { font-size: 0.85rem; color: #888; margin-right: 10px; }
+.customer-info { color: #46d9e1; font-weight: 500; font-size: 0.9rem; }
+
+.order-status-badge { padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: 600; background: #e0fbfc; color: #46d9e1; }
+.order-status-badge[data-status="הגיע"] { background: #d4edda; color: #155724; }
+
+/* ניהול עמודות ב-Flex - זה מה שמסדר את היישור */
+.table-header-flex, .table-row-flex { display: flex; align-items: center; padding: 10px 0; }
+.table-header-flex { border-bottom: 2px solid #f9f9f9; color: #aaa; font-size: 0.8rem; font-weight: bold; }
+.table-row-flex { border-bottom: 1px solid #f5f5f5; }
+
+.col-product { flex: 3; text-align: right; }
+.col-qty { flex: 1; text-align: center; color: #666; }
+.col-price { flex: 1; text-align: left; font-weight: bold; }
+
+/* פירוט מוצר */
+.order-body { padding: 20px; }
+.product-name { font-weight: 600; display: block; }
+.customization-details { display: flex; gap: 8px; margin-top: 5px; }
+.detail-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b; }
+.detail-badge.color { background: #f0fdfa; color: #0d9488; border-color: #ccfbf1; }
+
+/* תחתית */
+.order-footer { padding: 15px 20px; background: #fdfdfd; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; }
+.total-sum .value { font-size: 1.3rem; font-weight: 800; color: #46d9e1; margin-right: 5px; }
+
+.action-btn { background: #46d9e1; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.action-btn:hover:not(:disabled) { background: #38b2b8; transform: translateY(-1px); }
+.action-btn.admin { background: #333; }
+.action-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+/* ריק */
+.empty-state { text-align: center; padding: 50px; color: #999; }
+.empty-state i { font-size: 3rem; color: #eee; }
+.shop-now-btn { background: white; border: 2px solid #46d9e1; color: #46d9e1; padding: 8px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+/* שינוי הצבע לטורקיז עבור תג הצבע */
+.detail-badge.color { 
+    background: #ecfdfe; /* רקע טורקיז בהיר מאוד */
+    color: #1ac1ca;      /* צבע טורקיז חזק */
+    border-color: #a5f3f7; 
+}
+
+/* סידור מבנה הכותרת */
+.order-info {
     display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-    background-color: #f9f9f9; /* רקע אפרפר עדין כמו בדף ההרשמה */
-    min-height: 100vh;
-    direction: rtl; /* יישור לימין */
+    flex-direction: column;
+    gap: 4px;
 }
 
-/* הכרטיס הלבן המרכזי */
-.order-history-card {
-    width: 100%;
-    max-width: 800px;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* צל עדין */
-}
-
-h2 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #46d9e1; /* קו טורקיז מתחת לכותרת */
-    padding-bottom: 10px;
-}
-
-/* עיצוב כל הזמנה בנפרד */
-.order-item {
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    transition: transform 0.2s;
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.order-item:hover {
-    border-color: #46d9e1; /* הדגשה בטורקיז במעבר עכבר */
-}
-
-.order-item p {
-    margin: 5px 0;
-    color: #555;
-    font-size: 14px;
-}
-
-/* הדגשת נתונים חשובים */
-.order-item p strong {
-    color: #333;
-}
-
-/* עיצוב רשימת המוצרים בתוך ההזמנה */
-.order-items {
-    background-color: #fcfcfc;
-    padding: 15px;
-    border-radius: 6px;
-    margin-top: 15px;
-}
-
-.order-items h4 {
-    margin: 0 0 10px 0;
-    color: #46d9e1;
-    font-size: 16px;
-}
-
-.details ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.details li {
-    padding: 8px 0;
-    border-bottom: 1px dashed #ddd;
-    font-size: 13px;
-}
-
-.order-items li:last-child {
-    border-bottom: none;
-}
-
-/* עיצוב הסטטוס (אופציונלי - לפי צבעים) */
-.order-item p:nth-child(4) {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.updateStaus{
+.order-main-details {
     display: flex;
     align-items: center;
+    gap: 8px; /* רווח קבוע בין מספר הזמנה למספר לקוח */
 }
 
-
-.updateStaus {
-    display: flex;
-    justify-content: flex-start; /* משנה את הכפתור לצד ימין (בגלל ה-RTL) */
-    margin-top: 15px;
+.customer-info { 
+    color: #1ac1ca; 
+    font-weight: 600; 
+    font-size: 0.9rem;
+    background: #f0fbfc;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
-/* עיצוב הכפתור */
-.updateStatus-btn {
-    background-color: #46d9e1; /* צבע הטורקיז מהלוגו והאתר */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px; /* פינות מעוגלות עדינות */
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease; /* אנימציה חלקה לשינויי צבע */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.order-number { 
+    font-weight: bold; 
+    color: #333; 
+    font-size: 1.1rem;
 }
 
-.admin-btn{
-    background-color: #1ac1ca; 
+.order-date { 
+    font-size: 0.85rem; 
+    color: #888; 
+}
+/* עיצוב בסיסי לכל תגי הסטטוס */
+.order-status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid transparent;
 }
 
-
-
-/* אפקט מעבר עכבר - צבע כהה יותר מעט */
-.updateStatus-btn:hover {
-    background-color: #4dbbc0;
-    transform: translateY(-1px); /* קפיצה קטנה למעלה */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+/* צבעים לפי מצב */
+.order-status-badge[data-status="באריזה"] {
+    background-color: #fef3c7; /* צהוב עדין */
+    color: #92400e;
+    border-color: #fde68a;
 }
 
-.admin-btn:hover{
-    background-color: #07abb4; 
+.order-status-badge[data-status="מוכן לשליחה"] {
+    background-color: #e0f2fe; /* כחול בהיר */
+    color: #075985;
+    border-color: #bae6fd;
 }
 
-/* אפקט לחיצה */
-.updateStatus-btn:active {
-    transform: translateY(0);
+.order-status-badge[data-status="נשלח"] {
+    background-color: #ede9fe; /* סגול */
+    color: #5b21b6;
+    border-color: #ddd6fe;
 }
 
-/* עיצוב כפתור מושבת (כשכבר לחצו עליו) */
-.updateStatus-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+.order-status-badge[data-status="בתחנת איסוף"] {
+    background-color: #ffedd5; /* כתום */
+    color: #9a3412;
+    border-color: #fed7aa;
 }
+
+.order-status-badge[data-status="הגיע"] {
+    background-color: #dcfce7; /* ירוק טורקיז */
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+/* שאר ה-CSS נשאר ללא שינוי מהגרסה הקודמת */

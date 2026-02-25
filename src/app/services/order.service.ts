@@ -56,7 +56,8 @@ export class OrderService {
    * שולח בקשת PUT ל-Endpoint המיועד
    */
   updateOrderStatus(orderId: number, status: string): Observable<any> {
-    // שליחת הסטטוס כ-String בתוך ה-Body כפי ש-Web API מצפה
+    // הבדיקה ב-Swagger מראה שהגוף הוא פשוט מחרוזת. 
+    // השימוש ב-JSON.stringify(status) הוא מצוין כי הוא מוסיף את המירכאות הכפולות הנחוצות.
     return this.http.put(`${this.apiUrl}/${orderId}/status`, JSON.stringify(status), {
       headers: { 'Content-Type': 'application/json' }
     });

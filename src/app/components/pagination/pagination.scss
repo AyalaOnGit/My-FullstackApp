@@ -1,42 +1,50 @@
-// .pagination-controls {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     gap: 15px;
-//     margin-top: 60px;
-  
-//     button {
-//       background: white;
-//       border: 1px solid #eee;
-//       width: 45px;
-//       height: 45px;
-//       border-radius: 50%;
-//       cursor: pointer;
-//       transition: all 0.2s;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-  
-//       &:hover:not(:disabled) {
-//         border-color: #00d1ff;
-//         color: #00d1ff;
-//       }
-  
-//       &:disabled { opacity: 0.3; cursor: not-allowed; }
-//     }
-  
-//     .page-info {
-//       font-weight: 600;
-//       color: #555;
-//       font-size: 1.1rem;
-//     }
-//   }
+.pagination-container {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
 .pagination-controls {
-    max-width: 300px;
-    margin: 2rem auto;
-    border: 1px solid var(--surface-border);
-    
-    span {
-      color: var(--text-color);
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: fit-content;
+
+  &:hover {
+    box-shadow: var(--card-shadow);
+    transform: translateY(-2px);
+  }
+
+  .page-display {
+    border-left: 1px solid var(--surface-border);
+    border-right: 1px solid var(--surface-border);
+    min-width: 80px;
+    justify-content: center;
+  }
+
+  // עיצוב מיוחד לכפתורי PrimeNG בתוך הפגינציה
+  :ng-deep {
+    .p-button.p-button-text {
+      color: var(--text-color-secondary);
+      
+      &:hover:not(:disabled) {
+        background: var(--primary-50);
+        color: var(--primary-color);
+      }
+      
+      &:disabled {
+        opacity: 0.4;
+      }
     }
   }
+}
+
+// התאמה למובייל
+@media (max-width: 576px) {
+  .pagination-controls {
+    gap: 0.5rem !important;
+    padding: 0.5rem !important;
+    
+    span[label] { display: none; } // מחביא את המילים "הבא/הקודם" במסכים קטנים
+  }
+}

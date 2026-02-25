@@ -1,54 +1,91 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { OrderDTO } from '../../models/order.model';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { Footer1 } from '../footer1/footer';
 import { Header } from '../header1/header';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [Footer1,Header,CommonModule],
+  imports: [Footer1, Header, CommonModule, RouterLink],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.css'
 })
-export class OrderHistoryComponent implements OnInit{
-  private orderService=inject(OrderService);
-  userService=inject(UserService);
+export class OrderHistoryComponent implements OnInit {
+  private orderService = inject(OrderService);
+  private cdr = inject(ChangeDetectorRef); // הזרקת שירות זיהוי שינויים
+  userService = inject(UserService);
 
-  ordersHistory:OrderDTO[]=[]
+  ordersHistory: OrderDTO[] = [];
 
   ngOnInit(): void {
     const currentUser = this.userService.currentUser();
-    
-    if (!currentUser) return; // הגנה אם אין משתמש מחובר
-  
+    if (!currentUser) return;
+
     this.orderService.getOrders().subscribe({
-      next: (allOrders) => {
-        console.log('נתונים מהשרת:', allOrders);
-        
+      next: (allOrders: any[]) => {
         if (this.userService.isAdmin()) {
           this.ordersHistory = allOrders;
         } else {
-          // שימי לב: ב-C# השדה הוא UserId (אות גדולה) ב-DTO
-          this.ordersHistory = allOrders.filter(order => order.userId === currentUser.UserId);
+          // סינון הזמנות לפי מזהה משתמש נוכחי
+          this.ordersHistory = allOrders.filter(o => 
+            (o.UserId === currentUser.UserId) || (o.userId === currentUser.UserId)
+          );
         }
+        this.cdr.detectChanges(); // וידוא רענון לאחר טעינה ראשונית
       },
       error: (err) => console.error('שגיאה בטעינת הזמנות:', err)
     });
   }
 
   updateOrderStatus(orderId: number) {
-    if(!this.userService.isAdmin()){
-    this.orderService.updateOrderStatus(orderId,'הגיע');}
-    else{
-      const statuses=this.orderService.getStatuses();
-      const thisStatusIndex=statuses.findIndex(status=>status===this.ordersHistory.find(order=>order.orderId===orderId)?.status);
-      if(thisStatusIndex<statuses.length-1){ //אם לא הגיע למצב האחרון
-      this.orderService.updateOrderStatus(orderId,statuses[(thisStatusIndex+1)]);
-      }
-    }
-  }
+    const statuses = this.orderService.getStatuses();
+    let nextStatus: string = '';
   
+    // מוצאים את המיקום של ההזמנה במערך
+    const orderIndex = this.ordersHistory.findIndex(o => ((o as any).OrderId || o.orderId) === orderId);
+    if (orderIndex === -1) return;
+  
+    const order = this.ordersHistory[orderIndex];
+  
+    // לוגיקה לקביעת הסטטוס הבא
+    if (!this.userService.isAdmin()) {
+      nextStatus = 'הגיע';
+    } else {
+      const currentStatus = (order as any).Status || (order as any).status;
+      const currentIndex = statuses.indexOf(currentStatus);
+      if (currentIndex !== -1 && currentIndex < statuses.length - 1) {
+        nextStatus = statuses[currentIndex + 1];
+      } else return;
+    }
+  
+    // שליחה לשרת
+    this.orderService.updateOrderStatus(orderId, nextStatus).subscribe({
+      next: () => {
+        // 1. יצירת עותק חדש של האובייקט (Shallow Copy)
+        const updatedOrder = { ...this.ordersHistory[orderIndex] };
+        
+        // 2. עדכון הסטטוס באובייקט החדש (תמיכה ב-PascalCase ו-camelCase)
+        if ((updatedOrder as any).Status !== undefined) {
+          (updatedOrder as any).Status = nextStatus;
+        } else {
+          (updatedOrder as any).status = nextStatus;
+        }
+  
+        // 3. עדכון המערך בצורה אימוטבילית (החלפת המערך כולו)
+        const newHistory = [...this.ordersHistory];
+        newHistory[orderIndex] = updatedOrder as OrderDTO;
+        this.ordersHistory = newHistory;
+        
+        // 4. הפקודה שגורמת לשינוי להופיע מיד על המסך
+        this.cdr.detectChanges();
+        
+        console.log(`הסטטוס של הזמנה ${orderId} עודכן ל-${nextStatus}`);
+      },
+      error: (err) => console.error('שגיאה בעדכון סטטוס:', err)
+    });
+  }
 }

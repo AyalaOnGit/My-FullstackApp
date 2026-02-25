@@ -1,0 +1,106 @@
+<div class="checkout-wrapper p-4 surface-ground min-h-screen">
+    <div class="max-w-6xl mx-auto"> 
+      
+      <div class="flex align-items-center justify-content-center mb-5 gap-3 text-500 text-xs">
+        <span class="font-bold custom-color">סל קניות</span>
+        <i class="pi pi-angle-left"></i>
+        <span class="font-bold text-900 border-bottom-2 custom-border pb-1">תשלום מאובטח</span>
+        <i class="pi pi-angle-left"></i>
+        <span>אישור הזמנה</span>
+      </div>
+  
+      <div class="grid justify-content-center align-items-start gap-4"> 
+        
+        <div class="col-12 lg:col-7 xl:col-6"> 
+          <div class="bg-white p-5 border-round-2xl shadow-1 border-1 surface-border">
+            <div class="mb-5 text-right">
+              <h2 class="text-xl font-bold m-0 text-900">פרטי כרטיס אשראי</h2>
+              <p class="text-500 text-xs mt-1">המידע שלך נשמר מאובטח ומוצפן</p>
+            </div>
+  
+            <div class="p-fluid">
+              <div class="field mb-4 text-right">
+                <label class="text-xs font-bold text-700 mb-2 block uppercase">שם בעל הכרטיס</label>
+                <input pInputText [(ngModel)]="paymentDetails.fullName" placeholder="ישראל ישראלי" class="p-inputtext-lg custom-input" />
+              </div>
+  
+              <div class="field mb-4 text-right">
+                <label class="text-xs font-bold text-700 mb-2 block uppercase">מספר כרטיס</label>
+                <span class="p-input-icon-left w-full">
+                  <i class="pi pi-credit-card"></i>
+                  <p-inputMask mask="9999-9999-9999-9999" [(ngModel)]="paymentDetails.cardNumber" placeholder="0000 0000 0000 0000" styleClass="p-inputtext-lg w-full custom-input"></p-inputMask>
+                </span>
+              </div>
+  
+              <div class="grid mb-5 text-right">
+                <div class="col-6 field mb-0">
+                  <label class="text-xs font-bold text-700 mb-2 block uppercase">תוקף</label>
+                  <p-inputMask mask="99/99" [(ngModel)]="paymentDetails.expiry" placeholder="MM/YY" styleClass="p-inputtext-lg custom-input"></p-inputMask>
+                </div>
+                <div class="col-6 field mb-0">
+                  <label class="text-xs font-bold text-700 mb-2 block uppercase">CVV</label>
+                  <p-inputMask mask="999" [(ngModel)]="paymentDetails.cvv" placeholder="123" styleClass="p-inputtext-lg custom-input"></p-inputMask>
+                </div>
+              </div>
+  
+              <button pButton pRipple (click)="processOrder()" 
+                      class="w-full shadow-2 custom-checkout-btn mb-3">
+                <span class="w-full text-center font-bold text-lg">
+                  אשר תשלום בסך {{totalPrice | currency:'ILS'}}
+                </span>
+              </button>
+  
+              <div class="flex align-items-center justify-content-center gap-2 py-2 border-round-lg custom-color bg-blue-50" style="font-size: 11px;">
+                <i class="pi pi-shield"></i>
+                <span class="font-bold uppercase tracking-wider">Secure Payment Processing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="col-12 lg:col-4 xl:col-3">
+            <div class="bg-white p-4 border-round-2xl shadow-1 mb-4 border-1 surface-border">
+              <h3 class="text-base font-bold mb-4 mt-0 border-bottom-1 surface-border pb-2 text-900 text-right">סיכום הזמנה</h3>
+              
+              <div class="order-scroll max-h-12rem overflow-y-auto px-1">
+                @for (item of cartItems; track $index) {
+                  <div class="flex align-items-center gap-3 mb-3">
+                    <img [src]="item.imageUrl" class="w-2rem h-2rem border-round object-fit-cover shadow-1">
+                    <div class="flex-grow-1 overflow-hidden text-right">
+                      <span class="block font-bold text-xs text-800 white-space-nowrap overflow-hidden text-overflow-ellipsis">{{item.name}}</span>
+                      <small class="text-500">{{item.quantity}} יח'</small>
+                    </div>
+                    <span class="font-bold text-xs text-900">{{item.price * item.quantity | currency:'ILS'}}</span>
+                  </div>
+                }
+              </div>
+          
+              <div class="my-3 flex justify-content-center">
+                  <div class="w-full border-top-1 surface-border opacity-50"></div>
+              </div>
+          
+              <div class="flex justify-content-between mb-2 text-base font-semibold text-700">
+                <span>ביניים</span>
+                <span>{{totalPrice | currency:'ILS'}}</span>
+              </div>
+              <div class="flex justify-content-between mb-3 text-base font-semibold">
+                <span>משלוח</span>
+                <span class="custom-color font-bold">חינם</span>
+              </div>
+          
+              <p-divider styleClass="my-3"></p-divider>
+          
+              <div class="flex justify-content-between align-items-center">
+                <span class="text-lg font-bold text-900">סה"כ</span>
+                <span class="text-2xl font-black custom-color">{{totalPrice | currency:'ILS'}}</span>
+              </div>
+            </div>
+          
+            <p-button label="חזרה לעריכת הסל" icon="pi pi-arrow-right" [text]="true" 
+                      routerLink="/cart" styleClass="w-full text-sm custom-color font-bold">
+            </p-button>
+          </div>
+  
+      </div>
+    </div>
+  </div>

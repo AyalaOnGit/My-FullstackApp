@@ -8,8 +8,7 @@
         type="text" 
         placeholder="חיפוש לפי שם..." 
         class="w-full"
-        [ngModel]="filterState.name" 
-        (ngModelChange)="filterState.name = $event"
+        [(ngModel)]="filterState.name"
         (keydown.enter)="applyFilters()" /> 
     </span>
 
@@ -19,7 +18,7 @@
       currency="ILS" 
       locale="he-IL"
       class="w-full md:w-auto"
-      [ngModel]="filterState.minPrice"
+      [(ngModel)]="filterState.minPrice"
       (onInput)="updateFilter('minPrice', $event.value)">
     </p-inputNumber>
 
@@ -29,7 +28,7 @@
       currency="ILS" 
       locale="he-IL"
       class="w-full md:w-auto"
-      [ngModel]="filterState.maxPrice"
+      [(ngModel)]="filterState.maxPrice"
       (onInput)="updateFilter('maxPrice', $event.value)">
     </p-inputNumber>
 
@@ -39,7 +38,7 @@
       optionValue="categoryName"
       placeholder="בחר קטגוריה" 
       class="w-full md:w-auto"
-      [ngModel]="filterState.category"
+      [(ngModel)]="filterState.category"
       (onChange)="updateFilter('category', $event.value)">
     </p-select>
 

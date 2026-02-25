@@ -1,16 +1,23 @@
 import { Category } from "./category";
 
 
+// export interface PageResponse<T> {
+//         data: T[];
+//         totalItems: number;
+//         currentPage: number;
+//         pageSize: number;
+//         hasPreviousPage: boolean;
+//         hasNextPage: boolean;
+// }
+   
 export interface PageResponse<T> {
-        data: T[];
-        totalItems: number;
+        items: T[];       // ב-C# זה Items
+        totalCount: number; // ב-C# זה TotalCount
         currentPage: number;
         pageSize: number;
-        hasPreviousPage: boolean;
-        hasNextPage: boolean;
 }
-      
-      export interface ProductDTO {
+
+export interface ProductDTO {
         productId: number;
         productName: string;
         price: number;

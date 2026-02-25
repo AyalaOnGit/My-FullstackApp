@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { ProductDTO } from '../models/product.model';
+import { PageResponse, ProductDTO } from '../models/product.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -25,32 +25,33 @@ export class ProductService {
     description?: string,
     minPrice?: number,
     maxPrice?: number,
-    categoryIds?: number[],
-    limit: number = 20,
-    position: number = 1
-  ): Observable<{ items: ProductDTO[], totalCount: number }> {
+    categoriesId?: number[], // שם הפרמטר כמו ב-C#
+    limit: number = 8,
+    offset: number = 1       // שם הפרמטר כמו ב-C#
+  ): Observable<PageResponse<ProductDTO>> {
     
     let params = new HttpParams()
       .set('limit', limit.toString())
-      .set('position', position.toString());
-
+      .set('offset', offset.toString());
+  
     if (description) params = params.set('description', description);
     if (minPrice) params = params.set('minPrice', minPrice.toString());
     if (maxPrice) params = params.set('maxPrice', maxPrice.toString());
     
-    if (categoryIds && categoryIds.length > 0) {
-      categoryIds.forEach(id => params = params.append('categoryIds', id.toString()));
+    if (categoriesId && categoriesId.length > 0) {
+      categoriesId.forEach(id => params = params.append('categoriesId', id.toString()));
     }
-
-    return this.http.get<{ items: ProductDTO[], totalCount: number }>(this.apiUrl, { params });
+  
+    // הקריאה מחזירה את האובייקט המלא מה-Controller
+    return this.http.get<PageResponse<ProductDTO>>(this.apiUrl, { params });
   }
-
-  // 2. פונקציה שקוראת לשרת ומעדכנת את ה-Signals (לשימוש בדף הראשי)
-  loadProducts(description?: string, minPrice?: number, maxPrice?: number, categoryIds?: number[], limit: number = 20, position: number = 1): void {
-    this.getProducts(description, minPrice, maxPrice, categoryIds, limit, position)
+  
+  // עדכון פונקציית הטעינה שתומכת ב-Signals
+  loadProducts(description?: string, minPrice?: number, maxPrice?: number, categoriesId?: number[], limit: number = 8, offset: number = 1): void {
+    this.getProducts(description, minPrice, maxPrice, categoriesId, limit, offset)
       .subscribe(response => {
-        this.productsSignal.set(response.items);
-        this.totalCountSignal.set(response.totalCount);
+        this.productsSignal.set(response.items);      // מעדכן את רשימת המוצרים
+        this.totalCountSignal.set(response.totalCount); // מעדכן את הכמות הכוללת לפגינציה
       });
   }
 

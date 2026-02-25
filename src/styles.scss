@@ -47,3 +47,22 @@ body {
     --p-button-primary-active-background: #46d9e1a7 !important;
     --p-button-primary-active-border-color: #46d9e1b6 !important;
 }
+/* שינוי צבע הכפתורים של SweetAlert2 בכל האתר */
+.swal2-styled.swal2-confirm {
+    background-color: #46d9e1 !important;
+    box-shadow: 0 0 0 3px rgba(70, 217, 225, 0.2) !important;
+}
+
+/* שינוי צבע אייקון ה-Success (העיגול והוי) */
+.swal2-icon.swal2-success {
+    border-color: #46d9e1 !important;
+    color: #46d9e1 !important;
+}
+
+.swal2-icon.swal2-success [class^=swal2-success-line] {
+    background-color: #46d9e1 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border: .25em solid rgba(70, 217, 225, 0.3) !important;
+}

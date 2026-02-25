@@ -19,32 +19,24 @@ export class OrderHistoryComponent implements OnInit{
 
   ordersHistory:OrderDTO[]=[]
 
-  // ngOnInit(): void {
-  //   const allOrders=this.orderService.getOrders();
-
-  //   if(this.userService.isAdmin()){
-  //     this.ordersHistory=allOrders;
-  //   }
-  //   else{
-  //     const userId=this.userService.getCurrentUser()?.UserId;
-  //     this.ordersHistory=allOrders.filter(order=>order.userId===userId);
-  //   }
-  //   console.log(this.ordersHistory);
-  // }
   ngOnInit(): void {
-    const allOrders = this.orderService.getOrders();
-    const currentUser = this.userService.getCurrentUser();
+    const currentUser = this.userService.currentUser();
     
-    console.log('כל ההזמנות:', allOrders);
-    console.log('המשתמש המחובר:', currentUser);
+    if (!currentUser) return; // הגנה אם אין משתמש מחובר
   
-    if(this.userService.isAdmin()){
-      this.ordersHistory = allOrders;
-    } else {
-      const userId = currentUser?.UserId;
-      this.ordersHistory = allOrders.filter(order => order.userId === userId);
-      console.log('הזמנות לאחר סינון:', this.ordersHistory);
-    }
+    this.orderService.getOrders().subscribe({
+      next: (allOrders) => {
+        console.log('נתונים מהשרת:', allOrders);
+        
+        if (this.userService.isAdmin()) {
+          this.ordersHistory = allOrders;
+        } else {
+          // שימי לב: ב-C# השדה הוא UserId (אות גדולה) ב-DTO
+          this.ordersHistory = allOrders.filter(order => order.userId === currentUser.UserId);
+        }
+      },
+      error: (err) => console.error('שגיאה בטעינת הזמנות:', err)
+    });
   }
 
   updateOrderStatus(orderId: number) {

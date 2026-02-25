@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, OnInit, computed } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
@@ -17,79 +17,100 @@ import Swal from 'sweetalert2';
 })
 export class Header implements OnInit {
   private router = inject(Router);
-  public userService = inject(UserService); // הזרקת ה-Service עם הסיגנלים
+  public userService = inject(UserService); 
   public cart = inject(Cart);
 
-  profileMenuItems: MenuItem[] = [];
-      
-  conection(){
-    if(this.userService.getCurrentUser())
-    {
-      Swal.fire({
-            title: '?להתנתק',
-            text: ` ${this.userService.getCurrentUser()!.UserFirstName} ${this.userService.getCurrentUser()!.UserLastName} את/ה כבר מחובר למערכת בשם  `,
-            icon: 'warning',
-            iconColor: '#46d9e1',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#46d9e1',
-            confirmButtonText: 'להתנתק',
-            cancelButtonText: 'להישאר מחובר'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.userService.logout();
-              this.router.navigate(['/connection']);
-            }
-          });
-      }
-        else{
-          this.router.navigate(['/connection']);
-        }
-    // console.log(this.userService.getCurrentUser());
-  }
-
-  disengagement(){
-    Swal.fire({
-            title: 'את/ה בטוח/ה?',
-            text: `תוכל/י לשוב ולהתחבר מחדש בהמשך`,
-            icon: 'warning',
-            iconColor: '#46d9e1',
-            showCancelButton: true,
-            confirmButtonColor:'#d33' ,
-            cancelButtonColor: '#46d9e1',
-            confirmButtonText: 'להתנתק',
-            cancelButtonText: 'להישאר מחובר'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.userService.logout();
-              this.router.navigate(['/home']);
-            }
-          });
-  }
-
-  ngOnInit() {
-    this.profileMenuItems = [
+  // שימוש ב-computed כדי שהתפריט יתעדכן אוטומטית כשהמשתמש מתחבר/מתנתק
+  profileMenuItems = computed<MenuItem[]>(() => {
+    const user = this.userService.currentUser(); // גישה לסיגנל
+    
+    return [
       {
-        // label: 'החשבון שלי',
-        
         items: [
-          {label: 'התחברות',icon: 'pi pi-sign-in',command: () => { this.conection();}},
-          { separator: true },
-          { label: 'פרופיל אישי', icon: 'pi pi-user', routerLink: '/profile' },
-          { label: 'הזמנות שלי', icon: 'pi pi-shopping-bag', routerLink: '/order-history' },
-          { separator: true },
-          { label: 'התנתקות', icon: 'pi pi-power-off', command: ()=>{this.disengagement();} }
+          // הצגת התחברות רק אם אין משתמש
+          { 
+            label: 'התחברות', 
+            icon: 'pi pi-sign-in', 
+            visible: !user,
+            command: () => this.router.navigate(['/connection']) 
+          },
+          { separator: true, visible: !user },
+          
+          // שדות שמופיעים רק אם יש משתמש
+          { 
+            label: 'פרופיל אישי', 
+            icon: 'pi pi-user', 
+            routerLink: '/profile', 
+            visible: !!user 
+          },
+          { 
+            label: 'הזמנות שלי', 
+            icon: 'pi pi-shopping-bag', 
+            routerLink: '/order-history', 
+            visible: !!user 
+          },
+          { separator: true, visible: !!user },
+          { 
+            label: 'התנתקות', 
+            icon: 'pi pi-power-off', 
+            visible: !!user,
+            command: () => this.disengagement() 
+          }
         ]
       }
     ];
+  });
+
+  // פונקציה לבדיקת חיבור (אם בכל זאת תרצי להשתמש בה בכפתור חיצוני)
+  conection() {
+    const user = this.userService.currentUser(); // תיקון: שימוש בסיגנל
+    if (user) {
+      Swal.fire({
+        title: '?להתנתק',
+        text: `את/ה כבר מחובר למערכת בשם ${user.UserFirstName} ${user.UserLastName}`,
+        icon: 'warning',
+        iconColor: '#46d9e1',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#46d9e1',
+        confirmButtonText: 'להתנתק',
+        cancelButtonText: 'להישאר מחובר'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.userService.logout();
+          this.router.navigate(['/connection']);
+        }
+      });
+    } else {
+      this.router.navigate(['/connection']);
+    }
   }
 
-  //for admin
-  addNewProduct(){
-    
-    const productId=0;
-    console.log("Navigating to product with ID:", productId);
+  disengagement() {
+    Swal.fire({
+      title: 'את/ה בטוח/ה?',
+      text: 'תוכל/י לשוב ולהתחבר מחדש בהמשך',
+      icon: 'warning',
+      iconColor: '#46d9e1',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#46d9e1',
+      confirmButtonText: 'להתנתק',
+      cancelButtonText: 'להישאר מחובר'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.logout();
+        this.router.navigate(['/home']);
+      }
+    });
+  }
 
+  ngOnInit() {
+    // אין צורך לאתחל כאן את profileMenuItems כי הוא מוגדר כ-computed
+  }
+
+  addNewProduct() {
+    const productId = 0;
     this.router.navigate(['/products', productId]);
   }
 }

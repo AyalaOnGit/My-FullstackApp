@@ -12,50 +12,68 @@
         </div>
 
         <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="grid">
+  
           <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
             <label class="font-bold">שם פרטי</label>
-            <input pInputText type="text" formControlName="firstName" class="w-full" [readonly]="!isEditing">
+            <input pInputText formControlName="userFirstName" class="w-full">
           </div>
-
+        
           <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
             <label class="font-bold">שם משפחה</label>
-            <input pInputText type="text" formControlName="lastName" class="w-full" [readonly]="!isEditing">
+            <input pInputText formControlName="userLastName" class="w-full">
           </div>
-
+        
           <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
             <label class="font-bold">מספר טלפון</label>
             <p-iconfield iconPosition="left">
               <p-inputicon styleClass="pi pi-phone"></p-inputicon>
-              <input pInputText type="text" formControlName="phone" class="w-full" [readonly]="!isEditing">
+              <input pInputText formControlName="phon" class="w-full">
             </p-iconfield>
           </div>
-
+        
           <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
             <label class="font-bold">כתובת אימייל</label>
             <p-iconfield iconPosition="left">
               <p-inputicon styleClass="pi pi-envelope"></p-inputicon>
-              <input pInputText type="email" formControlName="email" class="w-full" [readonly]="!isEditing">
+              <input pInputText formControlName="userEmail" class="w-full">
             </p-iconfield>
           </div>
-
+        
           <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
             <label class="font-bold">עיר</label>
-            <input pInputText type="text" formControlName="city" class="w-full" [readonly]="!isEditing">
+            <input pInputText formControlName="city" class="w-full">
           </div>
-
+        
           <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
             <label class="font-bold">כתובת למשלוח</label>
-            <p-iconfield iconPosition="left">
-              <p-inputicon styleClass="pi pi-map-marker"></p-inputicon>
-              <input pInputText type="text" formControlName="address" class="w-full" [readonly]="!isEditing">
-            </p-iconfield>
+            <input pInputText formControlName="address" class="w-full">
           </div>
-
+          @if (isEditing) {
+            <div class="field-group col-12 flex flex-column gap-2 mb-3 mt-2 animate-fadein">
+              <label class="font-bold text-primary">אישור שינויים בעזרת סיסמה</label>
+              
+              <p-iconfield iconPosition="left" class="w-full">
+                <p-inputicon styleClass="pi pi-lock"></p-inputicon>
+                <input 
+                  pInputText 
+                  type="password" 
+                  formControlName="password" 
+                  placeholder="הכנס סיסמה כדי לשמור..." 
+                  class="w-full border-primary"
+                  style="padding-left: 2.5rem;" 
+                />
+              </p-iconfield>
+              
+              <small class="text-secondary">יש להזין סיסמה כדי לאשר את עדכון הפרטים מול השרת.</small>
+            </div>
+          }
           <div class="col-12 flex justify-content-end gap-3 mt-4">
-            <p-button [label]="isEditing ? 'ביטול' : 'עריכת פרטים'" [icon]="isEditing ? 'pi pi-times' : 'pi pi-pencil'" 
+            <p-button [label]="isEditing ? 'ביטול' : 'עריכת פרטים'" 
+                      [icon]="isEditing ? 'pi pi-times' : 'pi pi-pencil'" 
                       severity="secondary" [outlined]="true" (click)="toggleEdit()"></p-button>
-            <p-button *ngIf="isEditing" label="שמור שינויים" icon="pi pi-check" type="submit" 
-                      [disabled]="profileForm.invalid" severity="primary"></p-button>
+            
+            <p-button *ngIf="isEditing" label="שמור שינויים" icon="pi pi-check" 
+                      type="submit" [disabled]="profileForm.invalid" severity="primary"></p-button>
           </div>
         </form>
       </div>

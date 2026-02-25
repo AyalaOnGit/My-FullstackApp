@@ -73,15 +73,19 @@ export class ProductService {
     );
   }
 
-  // 5. מחיקת מוצר
-  deleteProduct(productId: number): void {
-    this.http.delete(`${this.apiUrl}/${productId}`).subscribe(() => {
+// 5. מחיקת מוצר - גרסה מאוחדת ותקינה
+deleteProduct(productId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${productId}`).pipe(
+    tap(() => {
+      // עדכון ה-Signals המקומיים רק לאחר שהמחיקה בשרת הצליחה
       this.productsSignal.update(all => all.filter(p => p.productId !== productId));
       this.totalCountSignal.update(count => count - 1);
-    });
-  }
+    })
+  );
+}
 
-  getProductById(id: number): Observable<ProductDTO> {
-    return this.http.get<ProductDTO>(`${this.apiUrl}/${id}`);
-  }
+// שליפת מוצר לפי ID
+getProductById(id: number): Observable<ProductDTO> {
+  return this.http.get<ProductDTO>(`${this.apiUrl}/${id}`);
+}
 }

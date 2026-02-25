@@ -8,12 +8,3 @@ export interface UserDTO {
   Phon?: string;
   Role: string;
 }
-
-export interface UserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-}

@@ -21,9 +21,9 @@
 
       <div class="menu-container">
         <p-menu 
-          [model]="profileMenuItems" 
-          styleClass="cyan-custom-menu">
-        </p-menu>
+        [model]="profileMenuItems()" 
+        styleClass="cyan-custom-menu">
+      </p-menu>
       </div>
     </div>
     @if (userService.isAdmin()) {

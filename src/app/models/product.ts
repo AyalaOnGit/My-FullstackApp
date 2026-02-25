@@ -11,6 +11,7 @@ export interface CartItem {
         popularColor?: string; // נתוני ברירת המחדל מהקטלוג
         topText?: string;
 }
+
 // export interface CartItem {
 //         id: number;
 //         name: string;

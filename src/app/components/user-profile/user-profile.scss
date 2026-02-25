@@ -75,3 +75,19 @@
     }
   }
 }
+.p-iconfield {
+  p-inputicon {
+    pointer-events: none; /* זה גורם לזה שהקליק יעבור דרך האייקון לאינפוט */
+    z-index: 10;
+  }
+  
+  input {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// וודאי שאין שכבה שחוסמת את האינפוט
+input[pInputText] {
+    cursor: text !important;
+}

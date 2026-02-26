@@ -1,0 +1,118 @@
+<div class="contact-container p-4 md:p-6 max-w-7xl mx-auto min-h-screen">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-900 mb-2">נשמח לשמוע <span class="text-primary">ממך</span></h1>
+      <p class="text-600 text-lg">אנחנו כאן בשבילך בכל אחד מהסניפים שלנו או בדיגיטל</p>
+      <div class="w-3rem h-3px bg-primary mx-auto mt-3"></div>
+    </div>
+  
+    <div class="grid mt-4">
+      
+      <div class="col-12 lg:col-8 pr-0 lg:pr-4">
+        <p-card styleClass="border-round-2xl shadow-4 overflow-hidden border-none h-full">
+          <ng-template pTemplate="header">
+            <div class="bg-primary p-4 text-white flex justify-content-between align-items-center">
+              <div class="flex align-items-center gap-3">
+                <i class="pi pi-map text-3xl"></i>
+                <span class="text-2xl font-bold italic">Our Boutiques</span>
+              </div>
+              <span class="text-sm opacity-80 uppercase tracking-widest hidden md:block text-white">GiftForU Locations</span>
+            </div>
+          </ng-template>
+  
+          <div class="grid p-3">
+            <div class="col-12 md:col-6 p-3">
+              <div class="p-4 border-round-xl bg-gray-50 border-1 border-gray-100 hover:border-primary transition-duration-300">
+                <div class="flex align-items-center gap-2 mb-3">
+                  <i class="pi pi-map-marker text-primary text-xl"></i>
+                  <h3 class="m-0 font-bold">סניף דגל - תל אביב</h3>
+                </div>
+                <p class="text-700 m-0 line-height-3">דיזנגוף 100, מתחם המעצבים<br>קומה 1, חנות 14</p>
+                <p class="text-primary font-medium mt-2 mb-0"><i class="pi pi-clock text-xs mr-1"></i> 09:00 - 20:00</p>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6 p-3">
+              <div class="p-4 border-round-xl bg-gray-50 border-1 border-gray-100 hover:border-primary transition-duration-300">
+                <div class="flex align-items-center gap-2 mb-3">
+                  <i class="pi pi-map-marker text-primary text-xl"></i>
+                  <h3 class="m-0 font-bold">ירושלים</h3>
+                </div>
+                <p class="text-700 m-0 line-height-3">שדרת האלרוב, ממילא<br>כניסה מרכזית</p>
+                <p class="text-primary font-medium mt-2 mb-0"><i class="pi pi-clock text-xs mr-1"></i> 10:00 - 21:00</p>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6 p-3">
+              <div class="p-4 border-round-xl bg-gray-50 border-1 border-gray-100 hover:border-primary transition-duration-300">
+                <div class="flex align-items-center gap-2 mb-3">
+                  <i class="pi pi-map-marker text-primary text-xl"></i>
+                  <h3 class="m-0 font-bold">חיפה</h3>
+                </div>
+                <p class="text-700 m-0 line-height-3">גרנד קניון, דרך שמחה גולן<br>קומה ב', אגף המערבי</p>
+                <p class="text-primary font-medium mt-2 mb-0"><i class="pi pi-clock text-xs mr-1"></i> 09:30 - 21:30</p>
+              </div>
+            </div>
+  
+            <div class="col-12 md:col-6 p-3">
+              <div class="p-4 border-round-xl bg-gray-50 border-1 border-gray-100 hover:border-primary transition-duration-300">
+                <div class="flex align-items-center gap-2 mb-3">
+                  <i class="pi pi-map-marker text-primary text-xl"></i>
+                  <h3 class="m-0 font-bold">ראשון לציון</h3>
+                </div>
+                <p class="text-700 m-0 line-height-3">קניון הזהב, רחוב דוד סחרוב<br>שער פריז</p>
+                <p class="text-primary font-medium mt-2 mb-0"><i class="pi pi-clock text-xs mr-1"></i> 10:00 - 22:00</p>
+              </div>
+            </div>
+          </div>
+  
+          <div class="p-4 bg-gray-50 flex flex-wrap gap-3 justify-content-center border-top-1 border-gray-200">
+            <p-button (click)="openWhatsapp()" icon="pi pi-whatsapp" label="WhatsApp Chat" severity="success" styleClass="p-button-rounded px-5"></p-button>
+            <p-button icon="pi pi-phone" label="מוקד הזמנות: 050-1234567" [outlined]="true" styleClass="p-button-rounded px-5"></p-button>
+          </div>
+        </p-card>
+      </div>
+  
+      <div class="col-12 lg:col-4 mt-4 lg:mt-0">
+        <div class="flex flex-column h-full gap-4">
+          
+          <p-card styleClass="border-round-2xl shadow-6 border-none flex-grow-1">
+            <div class="p-2">
+              <h3 class="text-xl font-bold mb-4 flex align-items-center gap-2 text-900">
+                <i class="pi pi-send text-primary"></i>
+                הודעה מהירה
+              </h3>
+              
+              <div class="p-fluid">
+                <div class="field mb-3">
+                  <label for="name" class="text-sm font-bold block mb-1">שם</label>
+                  <input pInputText id="name" type="text" placeholder="שם מלא" class="p-inputtext-sm border-round-lg" />
+                </div>
+                
+                <div class="field mb-3">
+                  <label for="email" class="text-sm font-bold block mb-1">אימייל</label>
+                  <input pInputText id="email" type="email" placeholder="example@mail.com" class="p-inputtext-sm border-round-lg" />
+                </div>
+          
+                <div class="field mb-4">
+                  <label for="message" class="text-sm font-bold block mb-1">הודעה</label>
+                  <textarea pInputTextarea id="message" rows="4" placeholder="איך נוכל לעזור?" class="border-round-lg text-sm" style="resize: none;"></textarea>
+                </div>
+          
+                <p-button label="שלח" icon="pi pi-check" styleClass="w-full border-round-lg bg-primary border-none py-2 shadow-2"></p-button>
+              </div>
+            </div>
+          </p-card>
+  
+          <div class="surface-900 p-4 border-round-2xl shadow-4 text-white">
+            <div class="flex justify-content-around">
+              <i class="pi pi-instagram text-xl cursor-pointer hover:text-primary transition-colors"></i>
+              <i class="pi pi-facebook text-xl cursor-pointer hover:text-primary transition-colors"></i>
+              <i class="pi pi-tiktok text-xl cursor-pointer hover:text-primary transition-colors"></i>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+  
+    </div>
+  </div>

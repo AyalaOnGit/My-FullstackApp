@@ -11,4 +11,12 @@ import { DividerModule } from 'primeng/divider';
 })
 export class Footer1 {
 
+  phoneNumber: string = '972501234567'; 
+  businessName: string = 'GiftForU';
+
+  openWhatsapp() {
+    const message = encodeURIComponent(`היי ${this.businessName}, הגעתי מהאתר ואשמח להתייעץ לגבי מתנה!`);
+    const url = `https://wa.me/${this.phoneNumber}?text=${message}`;
+    window.open(url, '_blank');
+  }
 }

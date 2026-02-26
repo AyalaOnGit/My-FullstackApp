@@ -89,6 +89,7 @@ export class ProductCardComponent implements OnInit {
 loadProduct() {
   this.productService.getProductById(this.productId).subscribe({
     next: (product) => {
+      console.log('המוצר שהגיע מהשרת:', product);
       this.currentProduct = product;
       this.productName = product.productName;
       this.productPrice = product.price;
@@ -97,7 +98,12 @@ loadProduct() {
       this.colors = product.colors ? [...product.colors] : [];
       
       // כאן תיקנתי מ-value ל-categoryName (בהתאם ל-DTO בשרת)
-      this.selectedCategoryName = product.category?.value || '';
+      const categoryObj = product.category as any;
+      
+      if (categoryObj) {
+        // עכשיו הוא ייתן לך להשתמש ב-categoryName בלי לצעוק
+        this.selectedCategoryName = categoryObj.categoryName || '';
+      }
       
       this.cdr.detectChanges(); 
     }

@@ -44,7 +44,7 @@ export class ProductsPage implements OnInit {
   
   // הגדרות פגינציה
   currentPage: number = 1;
-  pageSize: number = 2; // שיניתי ל-8 כדי שיהיה יותר נעים לעין, תשני חזרה ל-4 אם תרצי
+  pageSize: number = 8; // שיניתי ל-8 כדי שיהיה יותר נעים לעין, תשני חזרה ל-4 אם תרצי
 
   currentUserIsAdmin: boolean = false;
 

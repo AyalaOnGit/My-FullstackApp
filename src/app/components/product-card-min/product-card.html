@@ -3,11 +3,16 @@
         (click)="goToDetails()">
 
   <ng-template pTemplate="header">
-    <div class="product-image-container">
-      <img [src]="productData?.imageUrl || 'assets/images/default-product.png'" 
-           [alt]="productData?.productName" 
-           class="product-full-image" />
-    </div>
+<div class="product-image-container" *ngIf="productData">
+  <img *ngIf="productData.imageUrl" 
+       [src]="'productsImages/' + productData.imageUrl" 
+       [alt]="productData.productName" 
+       class="product-full-image">
+
+  <img *ngIf="!productData.imageUrl" 
+       src="assets/images/default-product.png" 
+       class="product-full-image">
+</div>
   </ng-template>
 
   <div class="flex flex-column align-items-center gap-2">

@@ -26,7 +26,7 @@ export class ProductService {
     minPrice?: number,
     maxPrice?: number,
     categoriesId?: number[], // שם הפרמטר כמו ב-C#
-    limit: number = 8,
+    limit: number = 25,
     offset: number = 1       // שם הפרמטר כמו ב-C#
   ): Observable<PageResponse<ProductDTO>> {
     

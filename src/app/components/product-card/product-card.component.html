@@ -74,14 +74,11 @@
 
                 <div *ngIf="isEditing" class="add-color-container">
                     <input #newColorInput (keyup.enter)="addColor(newColorInput.value); newColorInput.value=''" 
-                           type="text" placeholder="צבע חדש..." class="edit-input small">
+                           type="text" placeholder="צבע חדש...(באנגלית בלבד)" class="edit-input small">
                     <button (click)="addColor(newColorInput.value); newColorInput.value=''">הוסף</button>
                 </div>
             </div>
 
-            <button *ngIf="!isAdmin()" class="add-to-cart-btn" [disabled]="!selectedColor" (click)="addToCart()">
-                {{ selectedColor ? 'הוספה לסל' : 'נא לבחור צבע' }}
-            </button>
             <div *ngIf="isAdmin()" class="adminActions">
                 <ng-container *ngIf="isEditing">
                     <button class="save-btn admin-btn-II" (click)="saveProduct()">
@@ -96,14 +93,15 @@
                 </ng-container>
                 
                 <ng-container *ngIf="!isEditing">
-                    <button class="delete-btn admin-btn" (click)="deleteProduct()">מחק מוצר</button>
+                    <button *ngIf="productId !== 0" class="delete-btn admin-btn" (click)="deleteProduct()">מחק מוצר</button>
+                    
                     <button class="edit-btn admin-btn" (click)="editProduct()">ערוך פרטי מוצר</button>
                 </ng-container>
             </div>
 
-            <div class="share-link-container">
+            <div *ngIf="productId !== 0" class="share-link-container">
                 <a (click)="copyLink()" class="copy-link">העתקת קישור למוצר</a>
-                <div *ngIf="showToast" class="toast-message">הקישור הועתק בהצלחה!</div>  
+                <div *ngIf="showToast" class="toast-message">הקישור הועתק בהצלחה!</div>
             </div>
         </div>
     </div>

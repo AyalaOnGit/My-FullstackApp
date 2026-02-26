@@ -66,3 +66,24 @@ body {
 .swal2-icon.swal2-success .swal2-success-ring {
     border: .25em solid rgba(70, 217, 225, 0.3) !important;
 }
+/* הגדרת צבע המותג החדש שלך */
+.brand-color {
+    color: #46d9e1 !important;
+  }
+  
+  .brand-bg {
+    background-color: #46d9e1 !important;
+  }
+  
+  /* אפקט Hover לכפתורים שיהיה קצת יותר כהה מהטורקיז שלך */
+  .brand-button {
+    background-color: #46d9e1;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .brand-button:hover {
+    background-color: #3bbcc4; /* גרסה מעט יותר עמוקה ל-hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(70, 217, 225, 0.4);
+  }

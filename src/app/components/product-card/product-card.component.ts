@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { Cart } from '../../services/cart';
 import { CategoryService } from '../../services/category';
 import { Category } from '../../models/category';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-card',
@@ -93,7 +94,15 @@ loadProduct() {
       this.currentProduct = product;
       this.productName = product.productName;
       this.productPrice = product.price;
-      this.productImage = product.imageUrl ?? 'assets/images/default-product.png';
+
+      if (product.imageUrl) {
+        // מחברים את שם התיקייה עם שם הקובץ מה-DB
+        this.productImage = 'productsImages/' + product.imageUrl;
+      } else {
+        this.productImage = 'assets/images/default-product.png';
+      }
+      
+      // this.productImage = product.imageUrl ?? 'assets/images/default-product.png';
       this.productDescription = product.description ?? 'אין תיאור זמין';
       this.colors = product.colors ? [...product.colors] : [];
       
@@ -148,7 +157,7 @@ loadProduct() {
         productId: this.currentProduct.productId,
         name: this.productName,
         price: this.productPrice,
-        imageUrl: this.productImage,
+        imageUrl: `${environment.imgPath}/this.productImage`,
         color: this.selectedColor,
         customText: this.userText || 'ללא כיתוב'
       };

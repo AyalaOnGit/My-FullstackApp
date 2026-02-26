@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 })
 export class Pagination {
   @Input() totalItems: number = 0;
-  @Input() pageSize: number = 8;
+  @Input() pageSize: number = 2;
   @Input() currentPage: number = 1;
   
   // זה ה"רמקול" שפולט את האירוע החוצה

@@ -98,7 +98,10 @@ loadProduct() {
 
       if (product.imageUrl) {
         // מחברים את שם התיקייה עם שם הקובץ מה-DB
-        this.productImage = 'productsImages/' + product.imageUrl;
+        if(product.imageUrl.at(0)=='p')
+          this.productImage = product.imageUrl;
+        else
+          this.productImage = 'productsImages/' + product.imageUrl;
       } else {
         this.productImage = 'assets/images/default-product.png';
       }
@@ -158,11 +161,11 @@ loadProduct() {
         productId: this.currentProduct.productId,
         name: this.productName,
         price: this.productPrice,
-        imageUrl: `${environment.imgPath}/this.productImage`,
+        imageUrl:(this.productImage).substring(15),
         color: this.selectedColor,
         customText: this.userText || 'ללא כיתוב'
       };
-
+      console.log(customProduct.imageUrl)
       this.cartService.addToCart(customProduct);
 
       Swal.fire({
@@ -205,13 +208,12 @@ saveProduct() {
     productName: this.productName,
     price: this.productPrice,
     description: this.productDescription,
-    imageUrl: this.productImage,
+    imageUrl: this.productImage.substring(15,this.productImage.length),
     colors: [...this.colors],
     toptext: this.currentProduct?.toptext || 'באהבה גדולה',
     // כאן התיקון הקריטי עבור ה-C#
     category: categoryForServer as any
   };
-
   // 3. שליחה לשרת
   if (this.productId === 0) {
     this.productService.addProduct(productData).subscribe({

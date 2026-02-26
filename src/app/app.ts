@@ -17,3 +17,25 @@ import { Header } from './components/header1/header';
 export class App {
   protected readonly title = signal('my-pro');
 }
+
+
+// import { Component, OnInit } from '@angular/core';
+// import { AudioService } from './audio.service';
+
+// @Component({
+//   selector: 'app-root',
+//   templateUrl: './app.component.html'
+// })
+// export class AppComponent implements OnInit {
+//   constructor(private audioService: AudioService) {}
+
+//   ngOnInit() {
+//     // מומלץ להפעיל רק אחרי לחיצה ראשונה של המשתמש באתר
+//     // כדי למנוע חסימה של הדפדפן
+//   }
+
+//   toggleMusic() {
+//     // דוגמה לפונקציה שאפשר לקרוא לה מכפתור ב-HTML
+//     this.audioService.play();
+//   }
+// }

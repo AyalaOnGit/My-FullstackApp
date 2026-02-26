@@ -59,6 +59,7 @@ export class Filter implements OnInit {
       maxPrice: this.filterState.maxPrice ?? Infinity,
       minPrice: this.filterState.minPrice ?? 0
     };
+    // console.log(stateToSend.category)
     this.onFilterChange.emit(stateToSend);
   }
 

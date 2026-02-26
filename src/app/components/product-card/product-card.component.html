@@ -78,6 +78,20 @@
                     <button (click)="addColor(newColorInput.value); newColorInput.value=''">הוסף</button>
                 </div>
             </div>
+            <div *ngIf="!isAdmin() && !isEditing" class="purchase-section mt-5 px-2">
+                <p-button 
+                    label="הוספה לסל הקניות" 
+                    icon="pi pi-shopping-cart" 
+                    (click)="addToCart()" 
+                    [disabled]="!selectedColor"
+                    styleClass="add-to-cart-custom shadow-4 w-full border-round-xl py-3 font-bold text-xl">
+                </p-button>
+                
+                <div *ngIf="!selectedColor" class="flex align-items-center justify-content-center gap-2 mt-3 text-500">
+                    <!-- <i class="pi pi-info-circle text-sm"></i> -->
+                    <small class="font-italic">יש לבחור צבע למתנה כדי להמשיך</small>
+                </div>
+            </div>
 
             <div *ngIf="isAdmin()" class="adminActions">
                 <ng-container *ngIf="isEditing">

@@ -13,11 +13,12 @@ import { Cart } from '../../services/cart';
 import { CategoryService } from '../../services/category';
 import { Category } from '../../models/category';
 import { environment } from '../../../environments/environment';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [Footer1, Header, FormsModule, CommonModule],
+  imports: [Footer1, Header, FormsModule, CommonModule,ButtonModule],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })

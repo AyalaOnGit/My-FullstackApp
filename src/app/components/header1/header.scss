@@ -1,0 +1,178 @@
+$primary-cyan: #61c6cb;
+$dark-blue: #1e293b;
+$light-bg: #f8fafc;
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 3rem;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  direction: rtl;
+  height:15vh;
+}
+
+/* --- עיצוב הלוגו --- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 800;
+  
+  .pi-coffee {
+    color: $primary-cyan;
+    font-size: 1.8rem;
+  }
+
+  .primary {
+    color: $primary-cyan;
+  }
+}
+
+/* --- עיצוב תפריט הניווט המרכזי --- */
+.nav-links {
+  display: flex;
+  gap: 0.5rem;
+
+  a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 600;
+    padding: 0.7rem 1.2rem;
+    border-radius:30px; /* תואם לסגנון הכפתורים */
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $primary-cyan;
+      background: rgba(70, 217, 225, 0.05);
+    }
+
+    &.active {
+      background: rgba(104, 216, 222, 0.1);
+      color: $primary-cyan;
+      box-shadow: inset 0 0 0 0.1px rgba(70, 217, 225, 0.2);
+    }
+  }
+}
+
+/* --- אזור כפתורי הפעולה (שמאל) --- */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* --- אזור אישי ותפריט נפתח --- */
+.profile-wrapper {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 5px; 
+  margin-bottom:0px;
+
+  &:hover {
+    .menu-container {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .profile-btn {
+      color: $primary-cyan;
+      border-color: $primary-cyan;
+      background: white;
+      box-shadow: 0 4px 12px rgba(70, 217, 225, 0.1);
+    }
+    .arrow-icon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 50px;
+  background: $light-bg;
+  color: $dark-blue;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1.5px solid transparent;
+  
+  .arrow-icon {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+  }
+}
+
+.menu-container {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+  padding-top: 0px;
+}
+
+:host ::ng-deep .cyan-custom-menu.p-menu {
+  width: 120px;
+  border: none;
+  border-radius: 18px;
+  background: rgb(175, 231, 237);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+  padding: 0.7rem;
+  padding-top:0.3rem;
+  padding-bottom: 1.1rem;
+
+  .p-menuitem-link {
+    padding: 0.5rem 1.1rem;
+    border-radius: 12px;
+    margin-bottom: 5px;
+    transition: all 0.2s ease;
+
+    .p-menuitem-icon {
+      color: $primary-cyan;
+      margin-left: 12px;
+      font-size: 1.1rem;
+    }
+
+    .p-menuitem-text {
+      font-weight: 900;
+      color: $dark-blue;
+    }
+
+    &:hover {
+      background: rgba(70, 217, 225, 0.08);
+      transform: translateX(-3px); /* אפקט תנועה עדין */
+      .p-menuitem-text { color: $primary-cyan; }
+    }
+  }
+}
+
+/* --- כפתור עגלת קניות --- */
+.cart-btn {
+  ::ng-deep .p-button {
+    background:  #61c6cbbd !important;
+    border: none !important;
+    border-radius: 50px;
+    padding: 0.7rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    
+    &:hover { 
+      filter: brightness(1.05);
+      box-shadow: 0 5px 15px rgba(70, 217, 225, 0.066);
+    }
+
+    .p-button-label {
+      margin-right: 0.5rem;
+    }
+  }
+}

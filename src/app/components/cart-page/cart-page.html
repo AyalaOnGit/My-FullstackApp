@@ -1,0 +1,83 @@
+<div class="cart-container p-4 max-w-5xl mx-auto min-h-screen">
+  <h1 class="text-3xl font-bold mb-5 flex align-items-center gap-3">
+    <i class="pi pi-shopping-bag text-4xl text-primary"></i>
+    סל הקניות שלי
+  </h1>
+
+  @if (cartItems.length > 0) {
+    <div class="grid">
+      <div class="col-12 lg:col-8" [@listAnimation]="cartItems.length">
+        <div class="flex flex-column gap-3">
+          @for (item of cartItems; track $index) {
+            <p-card class="cart-item-card shadow-sm border-round-xl overflow-hidden">
+              <div class="flex flex-column sm:flex-row align-items-center gap-4">
+                
+                <img  [src]="'http://localhost:5222/productsImages/' + item.imageUrl"  [alt]="item.name" class="w-7rem h-7rem border-round-lg shadow-1" style="object-fit: cover;" />
+
+                <div class="flex-grow-1">
+                  <h3 class="m-0 text-xl font-bold text-900">{{ item.name }}</h3>
+                  <div class="flex flex-wrap gap-2 mt-2 mb-3">
+                    <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 border-round">צבע: {{ item.color }}</span>
+                    <span class="text-xs bg-gray-100 text-700 px-2 py-1 border-round italic">"{{ item.customText }}"</span>
+                  </div>
+                  <div class="text-600 font-medium">{{ item.price | currency:'ILS' }}</div>
+                </div>
+
+                <div class="flex flex-column align-items-center sm:align-items-end gap-2">
+                  <div class="flex align-items-center bg-gray-100 border-round-pill px-2">
+                    <p-button icon="pi pi-minus" [rounded]="true" [text]="true" (click)="changeQuantity(item, -1)"></p-button>
+                    <span class="font-bold text-lg w-2rem text-center">{{ item.quantity }}</span>
+                    <p-button icon="pi pi-plus" [rounded]="true" [text]="true" (click)="changeQuantity(item, 1)"></p-button>
+                  </div>
+                  <div class="text-xl font-bold text-primary">
+                    {{ (item.price * item.quantity) | currency:'ILS' }}
+                  </div>
+                </div>
+                
+                <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" 
+                          (click)="removeFromCart(item)" pTooltip="הסר מהסל">
+                </p-button>
+
+              </div>
+            </p-card>
+          }
+        </div>
+      </div>
+
+      <div class="col-12 lg:col-4">
+        <div class="sticky top-0 pt-1">
+          <p-card header="סיכום הזמנה" styleClass="border-round-xl shadow-2">
+            <div class="flex justify-content-between mb-3 text-700">
+              <span>סה"כ פריטים:</span>
+              <span class="font-bold">{{ cartService.totalItemsCount }}</span>
+            </div>
+            <p-divider></p-divider>
+            <div class="flex justify-content-between text-2xl mb-5">
+              <span class="font-medium">סה"כ לתשלום:</span>
+              <span class="font-extrabold text-primary">{{ totalAmount | currency:'ILS' }}</span>
+            </div>
+            
+            <p-button label="המשך לתשלום" 
+                      icon="pi pi-credit-card" 
+                      class="w-full" 
+                      styleClass="w-full p-button-lg border-round-lg shadow-2"
+                      (click)="goToCheckout()">
+            </p-button>
+            
+            <div class="flex align-items-center justify-content-center gap-2 mt-4 text-400 text-xs">
+              <i class="pi pi-lock"></i>
+              <span>רכישה מאובטחת SSL</span>
+            </div>
+          </p-card>
+        </div>
+      </div>
+    </div>
+
+  } @else {
+    <div class="empty-msg flex flex-column align-items-center justify-content-center py-8 bg-gray-50 border-round-3xl border-2 border-dashed border-200">
+      <i class="pi pi-shopping-cart text-8xl text-200 mb-4"></i>
+      <h2 class="text-2xl font-bold text-700">הסל שלך מחכה שתמלאי אותו...</h2>
+      <p-button label="חזרה לחנות" icon="pi pi-arrow-right" routerLink="/store" class="mt-4" styleClass="p-button-outlined border-round-lg"></p-button>
+    </div>
+  }
+</div>

@@ -1,0 +1,42 @@
+<p-card [header]="productData?.productName" 
+        class="custom-card shadow-2 hover:shadow-4 cursor-pointer"
+        (click)="goToDetails()">
+
+  <ng-template pTemplate="header">
+<div class="product-image-container" *ngIf="productData">
+  <img *ngIf="productData.imageUrl" 
+       [src]="imgBase + productData.imageUrl" 
+       [alt]="productData.productName" 
+       class="product-full-image">
+
+  <img *ngIf="!productData.imageUrl" 
+       src="assets/images/default-product.png" 
+       class="product-full-image">
+</div>
+  </ng-template>
+
+  <div class="flex flex-column align-items-center gap-2">
+    <span class="text-2xl font-semibold text-primary">
+      {{ productData?.price | currency:'ILS':'symbol' }}
+    </span>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-column gap-2">
+      <p-button *ngIf="isAdmin" 
+                label="עריכת מוצר" 
+                icon="pi pi-pencil" 
+                severity="warn"
+                styleClass="w-full"
+                (click)="onEdit($event)">
+      </p-button>
+
+      <p-button *ngIf="!isAdmin" 
+                label="הוספה לסל" 
+                icon="pi pi-shopping-cart" 
+                styleClass="w-full"
+                (click)="onAddToCart($event)">
+      </p-button>
+    </div>
+  </ng-template>
+</p-card>

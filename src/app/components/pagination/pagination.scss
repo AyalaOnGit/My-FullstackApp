@@ -1,0 +1,50 @@
+.pagination-container {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.pagination-controls {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: fit-content;
+
+  &:hover {
+    box-shadow: var(--card-shadow);
+    transform: translateY(-2px);
+  }
+
+  .page-display {
+    border-left: 1px solid var(--surface-border);
+    border-right: 1px solid var(--surface-border);
+    min-width: 80px;
+    justify-content: center;
+  }
+
+  // עיצוב מיוחד לכפתורי PrimeNG בתוך הפגינציה
+  :ng-deep {
+    .p-button.p-button-text {
+      color: var(--text-color-secondary);
+      
+      &:hover:not(:disabled) {
+        background: var(--primary-50);
+        color: var(--primary-color);
+      }
+      
+      &:disabled {
+        opacity: 0.4;
+      }
+    }
+  }
+}
+
+// התאמה למובייל
+@media (max-width: 576px) {
+  .pagination-controls {
+    gap: 0.5rem !important;
+    padding: 0.5rem !important;
+    
+    span[label] { display: none; } // מחביא את המילים "הבא/הקודם" במסכים קטנים
+  }
+}

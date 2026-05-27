@@ -1,0 +1,30 @@
+<div class="the-page">
+    <div class="the-card">
+        <h2>התחברות</h2>
+        <p class="subtitle">התגעגענו:)</p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+            <div class="filed">
+                <label>אימייל*</label>
+                <input type="text" formControlName="email" placeholder="example@mail.com">
+                @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']){
+                    <span class="error-message">נא להכניס כתובת אימייל תקינה</span>
+                }
+            </div>
+
+            <div class="filed">
+                <label>סיסמא*</label>
+                <input type="text" formControlName="password" placeholder="הכנס סיסמא">
+                @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']){
+                <span class="error-message">שכחת משהו?</span>   }
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="loginForm.invalid">
+            להתחברות
+            </button>
+
+            <a class="change-link" (click)="switchToRegister()">עוד לא רשום? להצטרפות</a>
+        </form>
+    </div>
+</div>

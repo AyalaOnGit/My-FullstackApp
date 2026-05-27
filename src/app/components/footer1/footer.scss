@@ -1,0 +1,24 @@
+.footer-container {
+    background-color: var(--surface-card);
+    
+    .footer-link {
+        text-decoration: none;
+        color: var(--text-color-secondary);
+        transition: all 0.2s;
+        width: fit-content;
+
+        &:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px); // אפקט קטן שמושך את הקישור ימינה (בעברית)
+        }
+    }
+}
+
+/* מוודא שהאייקונים של הרשתות החברתיות נראים טוב */
+:host ::ng-deep .p-button.p-button-text.p-button-secondary {
+    color: var(--text-color-secondary);
+    &:hover {
+        background: var(--primary-50);
+        color: var(--primary-color);
+    }
+}

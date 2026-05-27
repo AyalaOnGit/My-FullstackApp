@@ -1,0 +1,72 @@
+<div class="order-history-container">
+    <div class="page-header">
+      <h1>{{ userService.isAdmin() ? 'ניהול הזמנות מערכת' : 'ההזמנות שלי' }}</h1>
+      <div class="header-underline"></div>
+    </div>
+  
+    <div *ngIf="ordersHistory.length > 0; else noOrders" class="orders-list">
+      <div class="order-card" *ngFor="let order of ordersHistory">
+        
+        <div class="order-header">
+            <div class="order-info">
+              <div class="order-main-details">
+                <span class="order-number">הזמנה #{{ $any(order).OrderId || order.orderId }}</span>
+                <span class="customer-info" *ngIf="userService.isAdmin()">
+                  (לקוח: {{ $any(order).UserId || order.userId }})
+                </span>
+              </div>
+              <span class="order-date">{{ $any(order).OrderDate || order.orderDate }}</span>
+            </div>
+            <div class="order-status-badge" [attr.data-status]="$any(order).Status || order.status">
+              {{ $any(order).Status || order.status }}
+            </div>
+          </div>
+  
+        <div class="order-body">
+          <div class="table-header-flex">
+            <span class="col-product">מוצר ופירוט</span>
+            <span class="col-qty">כמות</span>
+            <span class="col-price">מחיר יחידה</span>
+          </div>
+  
+          <div class="items-list">
+            <div *ngFor="let item of ($any(order).OrderItems || order.orderItems)" class="table-row-flex">
+              <div class="col-product product-main-info">
+                <span class="product-name">{{ $any(item).ProductName || item.productName }}</span>
+                <div class="customization-details">
+                  <span class="detail-badge color" *ngIf="$any(item).Popularcolore || item.popularcolore">
+                     צבע: {{ $any(item).Popularcolore || item.popularcolore }}
+                  </span>
+                  <span class="detail-badge text" *ngIf="$any(item).Customtext || item.customtext">
+                     טקסט: {{ $any(item).Customtext || item.customtext }}
+                  </span>
+                </div>
+              </div>
+              <span class="col-qty">x{{ $any(item).Quantity || item.quantity }}</span>
+              <span class="col-price">{{ ($any(item).Price || item.price || 0) | currency:'ILS' }}</span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="order-footer">
+          <div class="total-sum">
+            <span class="label">סה"כ לתשלום:</span>
+            <span class="value">{{ ($any(order).OrderSum || order.orderSum) | currency:'ILS' }}</span>
+          </div>
+          <button class="action-btn" [class.admin]="userService.isAdmin()"
+                  (click)="updateOrderStatus($any(order).OrderId || order.orderId)"
+                  [disabled]="($any(order).Status || order.status) === 'הגיע'">
+            {{ userService.isAdmin() ? 'עדכן שלב' : 'אישור קבלת חבילה' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #noOrders>
+      <div class="empty-state">
+        <i class="pi pi-box"></i>
+        <p class="empty-title">{{ userService.isAdmin() ? 'אין הזמנות במערכת' : 'טרם ביצעת הזמנות' }}</p>
+        <button *ngIf="!userService.isAdmin()" routerLink="/home" class="shop-now-btn">לחנות</button>
+      </div>
+    </ng-template>
+  </div>

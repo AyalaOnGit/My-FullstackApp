@@ -1,0 +1,89 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeflex/primeflex.css";
+@import "primeicons/primeicons.css";
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f7f777;
+    direction: rtl;
+}
+
+/* styles.scss */
+:root {
+    /* צבע המסגרת במיקוד (Focus) */
+    --p-select-focus-border-color: #46d9e1 !important;
+    
+    /* הצבע של האופציה שנבחרה בתוך הרשימה */
+    --p-select-option-selected-background: rgba(59, 234, 246, 0.15) !important;
+    --p-select-option-selected-color: #46d9e1 !important;
+    .p-button.p-button-primary:not(:disabled):hover {
+        background: #46d9e1c0 !important;  /* הטורקיז של ה-Hover */
+        border-color: #46d9e1c3 !important;
+        color: #faf9f9 !important;
+    }
+    /* צבע הטקסט והרקע כשמרחפים מעל אופציה שנבחרה */
+    --p-select-option-selected-focus-background: #0fd0dae4 !important;
+    --p-button-primary-hover-background: #2ed2de !important; /* טורקיז מעט כהה יותר מהרגיל */
+    
+    /* צבע הצ'ק המופיע ליד האופציה הנבחרת (אם קיים) */
+    --p-primary-color: #46d9e1cd !important;
+    .p-button {
+        transition: background-color 0.3s, transform 0.2s !important;
+        
+        &:hover {
+            transform: translateY(-2px); /* קפיצה קטנה למעלה בריחוף */
+        }
+        
+        &:active {
+            transform: translateY(0); /* חזרה למקום בלחיצה */
+        }
+    }
+    /* צבע הכפתור בזמן ריחוף (Hover) - טורקיז מעט כהה יותר */
+    --p-button-primary-hover-background: #0fcfda !important;
+    --p-button-primary-hover-border-color: #46d9e1 !important;
+    --p-button-primary-hover-color: #000000 !important;
+
+    /* צבע הכפתור בזמן לחיצה (Active) */
+    --p-button-primary-active-background: #46d9e1a7 !important;
+    --p-button-primary-active-border-color: #46d9e1b6 !important;
+}
+/* שינוי צבע הכפתורים של SweetAlert2 בכל האתר */
+.swal2-styled.swal2-confirm {
+    background-color: #46d9e1 !important;
+    box-shadow: 0 0 0 3px rgba(70, 217, 225, 0.2) !important;
+}
+
+/* שינוי צבע אייקון ה-Success (העיגול והוי) */
+.swal2-icon.swal2-success {
+    border-color: #46d9e1 !important;
+    color: #46d9e1 !important;
+}
+
+.swal2-icon.swal2-success [class^=swal2-success-line] {
+    background-color: #46d9e1 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border: .25em solid rgba(70, 217, 225, 0.3) !important;
+}
+/* הגדרת צבע המותג החדש שלך */
+.brand-color {
+    color: #46d9e1 !important;
+  }
+  
+  .brand-bg {
+    background-color: #46d9e1 !important;
+  }
+  
+  /* אפקט Hover לכפתורים שיהיה קצת יותר כהה מהטורקיז שלך */
+  .brand-button {
+    background-color: #46d9e1;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .brand-button:hover {
+    background-color: #3bbcc4; /* גרסה מעט יותר עמוקה ל-hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(70, 217, 225, 0.4);
+  }

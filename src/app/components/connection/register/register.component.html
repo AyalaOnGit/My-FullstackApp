@@ -1,0 +1,101 @@
+<div class="the-page">
+    <div class="the-card">
+        <h2>הרשמה</h2>
+        <p class="subtitle">הצטרפו לחנות המתנות שלנו</p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="name-row">
+                <div class="filed">
+                    <label>שם פרטי*</label>
+                    <input type="text" formControlName="firstName" placeholder="הכנס שם פרטי">
+                    @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors?.['required']){
+                    <span class="error-message">שדה חובה</span>   }
+                </div>
+
+                <div class="filed">
+                    <label>שם משפחה*</label>
+                    <input type="text" formControlName="lastName" placeholder="הכנס שם משפחה">
+                    @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors?.['required']){
+                        <span class="error-message">שדה חובה</span>   }
+                </div>
+            </div>
+
+            <div class="filed">
+                <label>אימייל*</label>
+                <input type="text" formControlName="email" placeholder="example@mail.com">
+                @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']){
+                    <span class="error-message">נא להכניס כתובת אימייל תקינה</span>
+                }
+            </div>
+
+            <div class="filed">
+                <label>סיסמא*</label>
+                <div class="password-wrapper">
+                    <input [type]="showPassword ? 'text' : 'password'" 
+                    formControlName="password" 
+                    placeholder="הכנס סיסמא">
+
+                    <button 
+                    type="button" 
+                    class="toggle-password"
+                    (click)="togglePasswordVisibility()">
+                    {{showPassword ? '🙈' : '👁️'}}
+                    </button>
+                </div>
+
+                @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']){
+                    <span class="error-message">שדה חובה</span>   }
+                    @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['minlength']){
+                        <span class="error-message">הסיסמא חייבת להכיל לפחות 8 תווים</span>
+                    }
+            </div>
+
+            <div class="filed">
+                <label>אימות סיסמא*</label>
+                
+                <div class="password-wrapper">
+
+                    <input [type]="showPassword ? 'text' : 'password'" 
+                    formControlName="confirmPassword" 
+                    placeholder="הכנס סיסמא שוב">
+                                        <button 
+                        type="button" 
+                        class="toggle-password"
+                        (click)="togglePasswordVisibility()">
+                        {{showPassword ? '🙈' : '👁️'}}
+                        </button>
+                </div>
+                @if (registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched){
+                    <span class="error-message">הסיסמאות לא תואמות</span>
+                }
+            </div>
+                
+            
+            <label style="margin-top: 15px;">חוזק סיסמא</label>
+            <div class="progress-bg" style="margin-top: 5px;">
+
+                <div class="progress-bar" 
+                    [style.width.%]="strength" 
+                    [style.background-color]="strengthColor"
+                    style="transition: all 0.4s ease-in-out; height: 100%; border-radius: 4px;">
+
+                </div>
+            </div>
+            <!-- <div class="strength-container">
+                <button type="button" class="check-btn" (click)="checkPasswordStrength()">
+                בדיקת חוזק סיסמה
+                </button>
+            </div> -->
+            
+            <!-- <div class="progress-bg">
+            <div class="progress-bar" [style.width.%]="strength" [style.background-color]="strengthColor"></div>
+            </div> -->
+
+            <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">
+                הירשם עכשיו
+            </button>
+
+            <a class="change-link" (click)="switchToLogin()">כבר רשום? להתחברות</a>
+        </form>
+    </div>
+</div>

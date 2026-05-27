@@ -1,0 +1,93 @@
+:host ::ng-deep {
+  .main-container {
+    background-color: #f8fafc; /* רקע עדין מאחורי הכרטיסים */
+    min-height: 100vh;
+  }
+
+  /* עיצוב אחיד לשני הכרטיסים */
+  .profile-card, .actions-card {
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    transition: transform 0.2s;
+  }
+
+  /* סידור האייקונים והשדות */
+  .p-iconfield {
+    display: flex !important;
+    align-items: center !important;
+    .p-inputicon {
+      left: 12px !important;
+      color: #94a3b8;
+    }
+    .p-inputtext {
+      padding-left: 2.5rem !important;
+      height: 45px !important;
+    }
+  }
+
+  .p-inputtext:not(.p-iconfield .p-inputtext) {
+    height: 45px !important;
+  }
+
+  .field-group label {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: #476969;
+  }
+
+  /* עיצוב תיבת הטקסט של המשוב */
+  textarea {
+    resize: none;
+    border-radius: 8px;
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #dbeafe;
+    }
+  }
+
+  /* שינוי צבע כפתור היסטוריית הזמנות */
+  .custom-history-btn {
+    /* שינוי צבע הטקסט */
+    .p-button-label {
+      color: #46d9e1 !important; /* החליפי לצבע הרצוי */
+      font-weight: 700;
+    }
+
+    /* שינוי צבע האייקון */
+    .p-button-icon {
+      color:  #46d9e1 !important;
+    }
+
+    /* שינוי צבע המסגרת (אופציונלי, כי זה outlined) */
+    border-color:  #46d9e1 !important;
+
+    /* שינוי צבע הריחוף (Hover) */
+    &:hover {
+      background: #f3fffe !important; /* רקע עדין כשעוברים עם העכבר */
+      border-color:  #46d9e1 !important;
+    }
+  }
+
+  /* שומר על גובה אחיד של הכרטיסים במסכים גדולים */
+  @media (min-width: 992px) {
+    .h-full {
+      height: 100% !important;
+    }
+  }
+}
+.p-iconfield {
+  p-inputicon {
+    pointer-events: none; /* זה גורם לזה שהקליק יעבור דרך האייקון לאינפוט */
+    z-index: 10;
+  }
+  
+  input {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// וודאי שאין שכבה שחוסמת את האינפוט
+input[pInputText] {
+    cursor: text !important;
+}

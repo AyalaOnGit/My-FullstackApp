@@ -1,0 +1,25 @@
+.search-wrapper {
+  position: relative;
+  display: inline-block;
+
+  i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    
+    /* שינויים כאן: */
+    z-index: 10;           // מבטיח שהאייקון מעל ה-input
+    pointer-events: auto;  // מאפשר ללחוץ על האייקון!
+    cursor: pointer;       // הופך את הסמן ליד (חשוב לחווית משתמש)
+
+    &:hover {
+      color: #46d9e1cd ;      // שינוי צבע קטן במעבר עכבר כדי שיראו שזה כפתור
+    }
+  }
+
+  input {
+    padding-left: 2.5rem !important;
+  }
+}

@@ -1,0 +1,60 @@
+<div class="store-container p-4">
+  
+  <div class="store-hero" style="background-image: url('homePictures/2.jpg'); background-size: cover; background-position: center; position: relative;">
+    <div class="hero-overlay flex flex-column align-items-center justify-content-center text-center">
+      <h1 class="hero-title text-6xl md:text-8xl font-extrabold text-white mb-2 tracking-tight">
+        Gift<span style="color: #8ddbdf;">ForU</span>
+      </h1>
+      
+      <div class="w-5rem h-2px mb-3" style="background-color: #46d9e1;"></div>
+      
+      <p class="hero-subtitle text-xl md:text-2xl font-light text-white opacity-90 tracking-widest">
+        מתנות שיוצרות סיפור אישי
+      </p>
+    </div>
+  </div>
+
+  
+  <p-divider></p-divider> 
+
+  <section class="filter-section my-4 surface-card p-3 border-round shadow-1">
+    <app-filter (onFilterChange)="filterProducts($event)"></app-filter>
+  </section>
+
+<main class="grid mt-3">
+  @if (filteredList.length > 0) {
+    @for (item of paginatedProducts; track item.productId; let i = $index) {
+      
+      <div class="col-12 sm:col-6 md:col-4 lg:col-3 p-2">
+        <app-product-card 
+          [productData]="item" 
+          [isAdmin]="currentUserIsAdmin">
+        </app-product-card>
+      </div>
+
+      @if (i === 3) { 
+        <div class="col-12 my-5 border-round overflow-hidden shadow-2" style="height: 300px;">
+          <img src="homePictures/4.jpg" alt="Gift atmosphere" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+      }
+
+    }
+  } @else {
+    <div class="col-12 text-center p-5">
+      <i class="pi pi-search text-4xl mb-3 text-400"></i>
+      <p class="text-xl text-600">לא נמצאו מוצרים התואמים לחיפוש שלך</p>
+    </div>
+  }
+</main>
+
+  @if (filteredList.length > pageSize) {
+    <footer class="pagination-section flex justify-content-center mt-5 p-4 surface-100 border-round">
+      <app-pagination 
+        [totalItems]="filteredList.length" 
+        [pageSize]="pageSize"
+        [currentPage]="currentPage"
+        (pageChanged)="changePage($event)">
+      </app-pagination>
+    </footer>
+  }
+</div>

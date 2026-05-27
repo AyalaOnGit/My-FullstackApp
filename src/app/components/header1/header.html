@@ -1,0 +1,50 @@
+<nav class="navbar">
+  <div class="logo flex align-items-center gap-2 cursor-pointer" routerLink="/">
+    <i class="pi pi-gift text-primary text-3xl"></i>
+    <span class="text-2xl font-bold text-900">
+      Gift<span class="text-primary">ForU</span>
+    </span>
+  </div>
+
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">דף הבית</a>
+    <a routerLink="/products" routerLinkActive="active">מוצרים</a>
+    <a routerLink="/about" routerLinkActive="active">עלינו</a>
+    <a routerLink="/connect-us" routerLinkActive="active">צור קשר</a>
+  </div>
+
+  <div class="actions">
+    <div class="profile-wrapper">
+      <div class="profile-btn">
+        <i class="pi pi-user"></i>
+        <span>החשבון שלי</span>
+        <i class="pi pi-chevron-down arrow-icon"></i>
+      </div>
+
+      <div class="menu-container">
+        <p-menu 
+        [model]="profileMenuItems()" 
+        styleClass="cyan-custom-menu">
+      </p-menu>
+      </div>
+    </div>
+    @if (userService.isAdmin()) {
+      <p-button
+        label="הוספת מוצר"
+        icon="pi pi-plus-circle"
+        styleClass="admin-add-btn"
+        (click)="addNewProduct()">
+        <!-- routerLink="/admin/add-product"> -->
+      </p-button>
+    }@else{
+      <p-button
+        label="סל קניות"
+        icon="pi pi-shopping-bag"
+        [badge]="cart.totalItemsCount.toString()"
+        badgeSeverity="danger"
+        styleClass="cart-btn"
+        routerLink="/cart">
+      </p-button>
+   }
+  </div>
+</nav>

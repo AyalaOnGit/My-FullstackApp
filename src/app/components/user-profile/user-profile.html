@@ -1,0 +1,115 @@
+
+<div class="main-container p-5">
+  <div class="grid mt-2" style="max-width: 1200px; margin: 0 auto;">
+    
+    <div class="col-12 lg:col-8">
+      <div class="profile-card surface-card p-5 shadow-3 border-round-xl h-full">
+        <div class="flex justify-content-between align-items-center mb-5">
+          <h2 class="text-3xl font-bold m-0 flex align-items-center gap-3 text-primary">
+            <i class="pi pi-user text-4xl"></i>
+            האזור האישי שלי
+          </h2>
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="grid">
+  
+          <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
+            <label class="font-bold">שם פרטי</label>
+            <input pInputText formControlName="userFirstName" class="w-full">
+          </div>
+        
+          <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
+            <label class="font-bold">שם משפחה</label>
+            <input pInputText formControlName="userLastName" class="w-full">
+          </div>
+        
+          <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
+            <label class="font-bold">מספר טלפון</label>
+            <p-iconfield iconPosition="left">
+              <p-inputicon styleClass="pi pi-phone"></p-inputicon>
+              <input pInputText formControlName="phon" class="w-full">
+            </p-iconfield>
+          </div>
+        
+          <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
+            <label class="font-bold">כתובת אימייל</label>
+            <p-iconfield iconPosition="left">
+              <p-inputicon styleClass="pi pi-envelope"></p-inputicon>
+              <input pInputText formControlName="userEmail" class="w-full">
+            </p-iconfield>
+          </div>
+        
+          <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
+            <label class="font-bold">עיר</label>
+            <input pInputText formControlName="city" class="w-full">
+          </div>
+        
+          <div class="field-group col-12 md:col-6 flex flex-column gap-2 mb-3">
+            <label class="font-bold">כתובת למשלוח</label>
+            <input pInputText formControlName="address" class="w-full">
+          </div>
+          @if (isEditing) {
+            <div class="field-group col-12 flex flex-column gap-2 mb-3 mt-2 animate-fadein">
+              <label class="font-bold text-primary">אישור שינויים בעזרת סיסמה</label>
+              
+              <p-iconfield iconPosition="left" class="w-full">
+                <p-inputicon styleClass="pi pi-lock"></p-inputicon>
+                <input 
+                  pInputText 
+                  type="password" 
+                  formControlName="password" 
+                  placeholder="הכנס סיסמה כדי לשמור..." 
+                  class="w-full border-primary"
+                  style="padding-left: 2.5rem;" 
+                />
+              </p-iconfield>
+              
+              <small class="text-secondary">יש להזין סיסמה כדי לאשר את עדכון הפרטים מול השרת.</small>
+            </div>
+          }
+          <div class="col-12 flex justify-content-end gap-3 mt-4">
+            <p-button [label]="isEditing ? 'ביטול' : 'עריכת פרטים'" 
+                      [icon]="isEditing ? 'pi pi-times' : 'pi pi-pencil'" 
+                      severity="secondary" [outlined]="true" (click)="toggleEdit()"></p-button>
+            
+            <p-button *ngIf="isEditing" label="שמור שינויים" icon="pi pi-check" 
+                      type="submit" [disabled]="profileForm.invalid" severity="primary"></p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-12 lg:col-4">
+      <div class="actions-card surface-card p-5 shadow-3 border-round-xl h-full flex flex-column gap-4">
+        
+        <h3 class="text-2xl font-bold m-0 text-700">פעולות נוספות</h3>
+        
+        <p-button label="היסטוריית הזמנות" 
+                  icon="pi pi-history" 
+                  [outlined]="true" 
+                  severity="info" 
+                  (click)="goToOrderHistory()"
+                  styleClass="w-full p-3 font-bold custom-history-btn">
+        </p-button>
+
+        <p-divider></p-divider>
+
+        <div class="feedback-container">
+          <h3 class="mt-0 flex align-items-center gap-2 text-900 text-xl">
+            <i class="pi pi-comments text-primary"></i> כתבו לנו משוב
+          </h3>
+          <div class="flex flex-column gap-3 mt-3">
+            <textarea pInputTextarea [(ngModel)]="feedbackText" rows="6" 
+                      class="w-full shadow-none bg-blue-50 border-none p-3" 
+                      placeholder="נשמח לשמוע את דעתך..."></textarea>
+            <p-button label="שלח משוב" icon="pi pi-send" 
+                      [disabled]="!feedbackText?.trim()" (click)="sendFeedback(feedbackText)"
+                      styleClass="w-full"></p-button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+</div>

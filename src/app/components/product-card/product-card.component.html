@@ -1,0 +1,130 @@
+<div class="product-page-container">
+    <div class="back-btn-container">
+        <button class="admin-btn" (click)="goBack()">&#8592; חזרה</button>
+    </div>
+    <div class="product-page" *ngIf="currentProduct || isEditing">
+        
+        <div class="right-side">
+            <div class="product-image">
+                <img class="real-img" 
+                     [src]="productImage" 
+                     [class.no-image]="productId === 0 && (!productImage || productImage.includes('placeholder'))"
+                     alt="product-image">
+                
+                <div *ngIf="isEditing" class="edit-image-overlay">
+                    <input #fileInput type="file" (change)="onFileSelect($event)" accept="image/*" hidden>
+                    
+                    <button class="admin-btn" [class.upload-main-btn]="productId === 0" (click)="fileInput.click()">
+                        {{ productId === 0 ? '➕ הוסף תמונה למוצר' : 'החלף תמונה' }}
+                    </button>
+                </div>   
+            </div>
+        </div>
+
+        <div class="left-side">
+            <h1 *ngIf="!isEditing" class="product-title">{{productName}}</h1>
+            <input *ngIf="isEditing" [(ngModel)]="productName" class="edit-input title-edit" placeholder="שם המוצר">
+        
+            <p *ngIf="!isEditing" class="product-description">{{ productDescription }}</p>
+            <textarea *ngIf="isEditing" [(ngModel)]="productDescription" class="edit-input desc-edit" placeholder="תיאור המוצר"></textarea>
+            
+            <p *ngIf="!isEditing" class="product-price">{{productPrice}} ₪</p>
+            <div *ngIf="isEditing" class="price-edit-container">
+                <span>מחיר:  </span>
+                <input type="number" [(ngModel)]="productPrice" class="edit-input price-edit">
+            </div>
+        
+            <div class="category-selection-container">
+                <p *ngIf="!isEditing" class="product-category-display">
+                    <strong>קטגוריה:</strong> {{ selectedCategoryName }}
+                </p>
+                
+                <div *ngIf="isEditing" class="category-edit-box">
+                    <span>קטגוריה: </span>
+                    <select [(ngModel)]="selectedCategoryName" class="edit-input category-select">
+                        <option value="" disabled>-- בחר קטגוריה --</option>
+                        <option *ngFor="let cat of categories" [value]="$any(cat).categoryName">
+                            {{ $any(cat).categoryName }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="!isAdmin()">
+                <h3>הטקסט שלך להדפסה:</h3>
+                <input type="text" [(ngModel)]="userText" placeholder="הכנס טקסט להדפסה">
+            </div>
+
+            <div class="color-selection">
+                <h3>{{ isEditing ? 'נהל צבעים' : 'בחר צבע' }}</h3>
+                <div class="colors-row">
+                    <ng-container *ngIf="!isEditing">
+                        <div *ngFor="let color of colors" 
+                            class="color-box" 
+                            [class.active]="selectedColor === color"
+                            (click)="selectColor(color)">
+                            {{ color }}
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="isEditing">
+                        <div *ngFor="let color of colors; let i=index" class="color-box edit-mode">
+                            {{color}}
+                            <span class="remove-color" (click)="removeColor(i)">❌</span>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <div *ngIf="isEditing" class="add-color-container">
+                    <input #newColorInput (keyup.enter)="addColor(newColorInput.value); newColorInput.value=''" 
+                           type="text" placeholder="צבע חדש...(באנגלית בלבד)" class="edit-input small">
+                    <button (click)="addColor(newColorInput.value); newColorInput.value=''">הוסף</button>
+                </div>
+            </div>
+            <div *ngIf="!isAdmin() && !isEditing" class="purchase-section mt-5 px-2">
+                <p-button 
+                    label="הוספה לסל הקניות" 
+                    icon="pi pi-shopping-cart" 
+                    (click)="addToCart()" 
+                    [disabled]="!selectedColor"
+                    styleClass="add-to-cart-custom shadow-4 w-full border-round-xl py-3 font-bold text-xl">
+                </p-button>
+                
+                <div *ngIf="!selectedColor" class="flex align-items-center justify-content-center gap-2 mt-3 text-500">
+                    <!-- <i class="pi pi-info-circle text-sm"></i> -->
+                    <small class="font-italic">יש לבחור צבע למתנה כדי להמשיך</small>
+                </div>
+            </div>
+
+            <div *ngIf="isAdmin()" class="adminActions">
+                <ng-container *ngIf="isEditing">
+                    <button class="save-btn admin-btn-II" (click)="saveProduct()">
+                        {{ productId === 0 ? 'צור מוצר חדש' : 'שמור שינויים' }}
+                    </button>
+                    
+                    <button class="cancel-btn admin-btn-II" (click)="cancelEdit()">ביטול</button>
+            
+                    <button *ngIf="productId !== 0" class="reset-btn admin-btn-II" (click)="resetToDefault()">
+                        שחזר ברירת מחדל
+                    </button>
+                </ng-container>
+                
+                <ng-container *ngIf="!isEditing">
+                    <button *ngIf="productId !== 0" class="delete-btn admin-btn" (click)="deleteProduct()">מחק מוצר</button>
+                    
+                    <button class="edit-btn admin-btn" (click)="editProduct()">ערוך פרטי מוצר</button>
+                </ng-container>
+            </div>
+
+            <div *ngIf="productId !== 0" class="share-link-container">
+                <a (click)="copyLink()" class="copy-link">העתקת קישור למוצר</a>
+                <div *ngIf="showToast" class="toast-message">הקישור הועתק בהצלחה!</div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!currentProduct && !isEditing" class="loading-container">
+        <div class="spinner"></div>
+        <p>טוען נתונים...</p>
+    </div>
+</div>

@@ -1,0 +1,441 @@
+.back-btn-container {
+    padding: 15px 40px 0;
+}
+
+.back-btn-container .admin-btn {
+    width: auto;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+}
+
+
+.product-page{
+    padding-top: 150px;
+    margin-top: 10px;
+    display: flex;
+    /* flex-direction: row-reverse; */
+    justify-content: center; 
+    align-items: flex-start;    
+    padding: 40px;
+    gap:40px;
+}
+
+.right-side{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    flex: 1;
+    max-width: 50%;
+
+
+}
+
+.real-img {
+    /* הגדרת גודל קבוע וזהה לכל התמונות */
+    width: 450px; 
+    height: 500px; 
+    object-fit: cover; 
+    
+    background-color: #f4f4f4; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    border-radius: 5px;
+    display: block;
+    margin: 10px auto 0; 
+}
+
+.right-side {
+    flex: 1; /* נותן לה מקום שווה */
+    max-width: 50%; /* מונע ממנה לעבור את חצי המסך */
+}
+
+.left-side{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 15px;
+    justify-content: flex-end;
+    max-width: 500px;
+
+}
+.product-price {
+    font-size: 1.2rem; /* להגדיל משמעותית */
+    font-weight: 600; /* עובי מודגש מאוד */
+    color: #333; /* צבע כהה ובולט */
+    margin: 10px 0 50px;
+    display: block;
+}
+
+/* אופציה: להוסיף רקע קטן או קו תחתון עדין */
+.product-price::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background-color: #46c1e1; /* הצבע הכחול של הכפתור שלך */
+    margin-top: 5px;
+}
+.colors-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+    height: 60px;
+    justify-content: space-between;
+}
+
+.color-box{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 10px 20px;
+    border: 2px #46d9e1 dashed;
+    border-style: dashed;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.color-box {
+    background-color: #f9f9f9; /* צבע ניטרלי עדין */
+    border: 1px solid #e0e0e0;
+    color: #888; /* טקסט קצת יותר בהיר */
+    transition: all 0.3s ease;
+}
+
+.color-box:hover{
+    background-color: #ddd;
+}
+
+.color-box.active{
+    border-color: #46d9e1;
+    background-color: #e7f1ff;
+
+    font-weight: bold;
+}
+
+input[type="text"], input[type="number"], textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    direction: rtl;
+}
+.add-to-cart-btn , .adminActions, .admin-btn{
+  margin-top: 15px;
+  padding: 15px 30px;
+  background-color: #46d9e1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.adminActions {
+    background-color: #ffffff;
+    display: flex;
+    flex-wrap: wrap; /* מאפשר לכפתורים לרדת שורה אם אין מקום */
+    gap: 10px;       /* יוצר רווח קבוע בין הכפתורים */
+    width: 100%;
+    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+.admin-btn{
+  width: 47%;
+  max-height: 100%;
+}
+
+
+.add-to-cart-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+.share-link-container{
+    position: relative;
+    text-align: end;
+    margin-top: -5px;
+}
+
+.copy-link {
+    color: #46d9e1;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    margin-left: 8px;
+    top:5px
+}
+
+.copy-link:hover {
+    color: #46c1e1;
+}
+
+.toast-message {
+    position: absolute;
+    top: -40px; /* מופיע מעל הקישור */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    animation: fadeInOut 0.5s; /* אפקט כניסה נעים */
+}
+
+/* אנימציה קטנה לכניסה חלקה */
+@keyframes fadeInOut {
+    from { opacity: 0; transform: translate(-50%, 10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* שדות קלט במצב עריכה */
+.edit-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed #46c1e1; /* מסגרת מקווקוות נותנת תחושה של עריכה */
+    border-radius: 5px;
+    background-color: #fffcf0; /* רקע צהבהב עדין להבדיל משדה רגיל */
+    font-size: 1rem;
+    outline: none;
+}
+
+.title-edit {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.desc-edit {
+    min-height: 100px;
+    resize: vertical; /* מאפשר למנהל להגדיל את התיבה */
+    font-family: inherit;
+}
+
+.price-edit-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price-edit {
+    width: 100px;
+}
+
+/* ניהול צבעים בעריכה */
+.edit-mode {
+    position: relative;
+    border-style: solid;
+}
+
+.remove-color {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.remove-color:hover {
+    background-color: #ff0000;
+    color: white;
+    border-color: #ff0000;
+    transform: scale(1.2); /* גדל מעט בסימון */
+}
+
+.remove-color:active {
+    transform: scale(0.9); /* מתכווץ בלחיצה */
+}
+
+.add-color-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.add-color-container .small {
+    flex: 2;
+}
+
+.add-color-container button {
+    flex: 1;
+    background-color: #46c1e1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* שכבת עריכה על התמונה */
+.edit-image-overlay {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.edit-image-overlay .admin-btn {
+    background-color: #333; /* צבע כהה וסולידי */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    width: auto; /* שלא יהיה על כל הרוחב אם לא צריך */
+    margin-top: 10px;
+}
+
+.edit-image-overlay .admin-btn:hover {
+    background-color: #46d9e1; /* הופך לכחול המותג בסימון */
+}
+
+/* כפתורי שמירה וביטול (admin-btn-II) */
+.admin-btn-II {
+    width: 49%;
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+.save-btn {
+    background-color: #2ecc71; /* ירוק לשמירה */
+}
+
+.cancel-btn {
+    background-color: #e74c3c; /* אדום לביטול */
+}
+
+.admin-btn-II:hover {
+    filter: brightness(1.1); /* מבהיר מעט בסימון */
+    transform: translateY(-2px); /* קופץ מעט למעלה */
+    transition: 0.2s;
+}
+
+.admin-btn-II:active {
+    transform: translateY(0); /* חוזר למקום בלחיצה */
+    filter: brightness(0.9); /* מתכהה מעט בלחיצה */
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.2); /* אפקט שקיעה */
+}
+
+.reset-btn {
+    background-color: #95a5a6; /* צבע אפור מקצועי */
+    margin-top: 10px; /* קצת רווח אם הכפתורים יורדים שורה */
+    width: 100% !important; /* שהשחזור יהיה לרוחב כל השורה מתחת לשמירה וביטול */
+}
+
+.reset-btn:hover {
+    background-color: #7f8c8d;
+}
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #46c1e1;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+.category-selection-container {
+    margin: 10px 0;
+}
+
+.product-category-display {
+    font-size: 1rem;
+    color: #555;
+}
+
+.category-edit-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-select {
+    cursor: pointer;
+    background-color: #fffcf0; /* צבע העריכה שלך */
+    border: 1px dashed #46c1e1;
+    flex: 1;
+}
+
+/* מוודא שה-Select לא קטן מדי */
+select.edit-input {
+    min-height: 40px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* עיצוב הכפתור הראשי */
+:host ::ng-deep .add-to-cart-custom {
+    background: #46d9e1 !important; /* הצבע שלך */
+    border: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    color: #ffffff !important;
+}
+
+/* אפקט Hover - צבע עמוק יותר ותנועה */
+:host ::ng-deep .add-to-cart-custom:enabled:hover {
+    background: #3bbcc4 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(70, 217, 225, 0.3) !important;
+}
+
+/* מצב לחיצה (Active) */
+:host ::ng-deep .add-to-cart-custom:enabled:active {
+    transform: translateY(-1px);
+}
+
+/* עיצוב כפתור כבוי (כשלא נבחר צבע) */
+:host ::ng-deep .add-to-cart-custom:disabled {
+    background: #e0e0e0 !important;
+    color: #9e9e9e !important;
+    opacity: 0.8;
+}
+
+/* אנימציית כניסה קטנה */
+.purchase-section {
+    animation: fadeInSlideUp 0.6s ease-out;
+}
+
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

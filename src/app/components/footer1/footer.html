@@ -1,0 +1,43 @@
+<footer class="footer-container surface-section px-4 py-6 md:px-6 lg:px-8 border-top-1 surface-border">
+    <div class="grid">
+        <div class="col-12 md:col-4">
+            <div class="flex align-items-center gap-2 mb-3">
+                <i class="pi pi-gift text-primary text-3xl"></i>
+                <span class="text-2xl font-bold text-900">Gift<span class="text-primary">ForU</span></span>
+            </div>
+            <p class="text-600 line-height-3 pr-0 md:pr-5">
+                הופכים רגעים פשוטים למזכרות מרגשות. מומחים במתנות בעיצוב אישי, הקדשות ייחודיות ומשלוחים מהירים לכל חלקי הארץ. כי לכל אחד מגיע משהו מיוחד.
+            </p>
+        </div>
+
+        <div class="col-12 md:col-4 flex flex-column gap-3">
+            <span class="text-900 font-bold text-xl mb-2">ניווט מהיר</span>
+            <a routerLink="/home" class="footer-link no-underline text-600 hover:text-primary transition-colors">החנות שלנו</a>
+            <a routerLink="/about" class="footer-link no-underline text-600 hover:text-primary transition-colors">הסיפור שלנו</a>
+            <a routerLink="/connect-us" class="footer-link no-underline text-600 hover:text-primary transition-colors">סניפים וצור קשר</a>
+            <a routerLink="/cart" class="footer-link no-underline text-600 hover:text-primary transition-colors">סל הקניות</a>
+        </div>
+
+        <div class="col-12 md:col-4">
+            <span class="text-900 font-bold text-xl mb-3 block">תשארו מעודכנים</span>
+            <div class="flex gap-3 mb-4">
+                <p-button icon="pi pi-facebook" [rounded]="true" [text]="true" severity="secondary" pTooltip="עקבו אחרינו בפייסבוק"></p-button>
+                <p-button icon="pi pi-instagram" [rounded]="true" [text]="true" severity="secondary" pTooltip="עקבו אחרינו באינסטגרם"></p-button>
+                <p-button icon="pi pi-whatsapp" [rounded]="true" [text]="true" severity="secondary" (click)="openWhatsapp()" pTooltip="דברו איתנו בוואטסאפ"></p-button>
+            </div>
+            <span class="text-600 block"><i class="pi pi-envelope ml-2 text-primary"></i> support@giftforu.co.il</span>
+            <span class="text-600 block mt-2"><i class="pi pi-phone ml-2 text-primary"></i> 050-1234567</span>
+        </div>
+    </div>
+
+    <p-divider class="mt-5"></p-divider>
+
+    <div class="flex flex-column md:flex-row justify-content-between align-items-center pt-3 gap-3">
+        <span class="text-500 text-sm">© 2026 GiftForU - מתנות בעיצוב אישי. כל הזכויות שמורות.</span>
+        <div class="flex gap-4">
+            <a class="text-500 hover:text-900 cursor-pointer no-underline text-sm transition-colors">מדיניות משלוחים</a>
+            <a class="text-500 hover:text-900 cursor-pointer no-underline text-sm transition-colors">תקנון האתר</a>
+            <a class="text-500 hover:text-900 cursor-pointer no-underline text-sm transition-colors">הצהרת נגישות</a>
+        </div>
+    </div>
+</footer>

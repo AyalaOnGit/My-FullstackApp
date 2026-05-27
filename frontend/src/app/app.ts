@@ -7,10 +7,11 @@ import { Pagination } from './components/pagination/pagination';
 import { UserProfile } from './components/user-profile/user-profile';
 import { Footer1 } from './components/footer1/footer';
 import { Header } from './components/header1/header';
+import { ChatComponent } from './components/chat/chat.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,ProductCardMin,ProductsPage,Filter,Pagination,UserProfile,Footer1, Header],
+  imports: [RouterOutlet,ProductCardMin,ProductsPage,Filter,Pagination,UserProfile,Footer1, Header, ChatComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

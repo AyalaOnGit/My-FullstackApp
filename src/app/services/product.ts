@@ -85,7 +85,13 @@ deleteProduct(productId: number): Observable<any> {
   );
 }
 
-// שליפת מוצר לפי ID
+  uploadImage(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${environment.apiUrl}/upload`, formData, { responseType: 'text' });
+  }
+
+  // שליפת מוצר לפי ID
 getProductById(id: number): Observable<ProductDTO> {
   return this.http.get<ProductDTO>(`${this.apiUrl}/${id}`);
 }

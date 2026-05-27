@@ -5,7 +5,7 @@
   <ng-template pTemplate="header">
 <div class="product-image-container" *ngIf="productData">
   <img *ngIf="productData.imageUrl" 
-       [src]="'productsImages/' + productData.imageUrl" 
+       [src]="imgBase + productData.imageUrl" 
        [alt]="productData.productName" 
        class="product-full-image">
 

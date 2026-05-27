@@ -24,7 +24,7 @@ export class Filter implements OnInit {
     name: '',
     maxPrice: null as number | null,
     minPrice: null as number | null,
-    category: 'all' // ערך ברירת מחדל
+    category: null as Category | null
   };
 
   @Output() onFilterChange = new EventEmitter<any>();
@@ -32,7 +32,7 @@ export class Filter implements OnInit {
   ngOnInit() {
     this.categoryService.getCategories().pipe(
       map(data => [
-        { categoryName: 'כל הקטגוריות', categoryId: 0 }, // הוספת האופציה הכללית לראש הרשימה
+        { categoryName: 'כל הקטגוריות' },
         ...data
       ])
     ).subscribe((data) => {
@@ -50,16 +50,13 @@ export class Filter implements OnInit {
   }
 
   applyFilters() {
+    const cat = this.filterState.category as any;
     const stateToSend = {
       ...this.filterState,
-      // אם נבחר "כל הקטגוריות" (categoryId: 0) או 'all', נשלח ערך ריק או 'all' לאבא
-      category: (this.filterState.category === 'כל הקטגוריות' || this.filterState.category === 'all') 
-                ? 'all' 
-                : this.filterState.category,
+      category: (!cat || cat.categoryName === 'כל הקטגוריות') ? 'all' : cat,
       maxPrice: this.filterState.maxPrice ?? Infinity,
       minPrice: this.filterState.minPrice ?? 0
     };
-    // console.log(stateToSend.category)
     this.onFilterChange.emit(stateToSend);
   }
 
@@ -68,7 +65,7 @@ export class Filter implements OnInit {
       name: '',
       maxPrice: null,
       minPrice: null,
-      category: 'all'
+      category: null
     };
     this.applyFilters();
   }

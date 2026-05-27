@@ -94,8 +94,8 @@ filterProducts(filters: any) {
                          product.price <= (filters.maxPrice ?? Infinity);
     
     // סינון קטגוריה (בהנחה שב-Product יש שדה categoryId או categoryName)
-    const matchesCategory = filters.category === 'all' || 
-                            product.category?.value === filters.category;
+    const matchesCategory = filters.category === 'all' || !filters.category ||
+                            product.category?.categoryName === filters.category?.categoryName;
     
     return matchesName && matchesPrice && matchesCategory;
   });

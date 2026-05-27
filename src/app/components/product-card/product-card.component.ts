@@ -96,15 +96,9 @@ loadProduct() {
       this.productName = product.productName;
       this.productPrice = product.price;
 
-      if (product.imageUrl) {
-        // מחברים את שם התיקייה עם שם הקובץ מה-DB
-        if(product.imageUrl.at(0)=='p')
-          this.productImage = product.imageUrl;
-        else
-          this.productImage = 'productsImages/' + product.imageUrl;
-      } else {
-        this.productImage = 'assets/images/default-product.png';
-      }
+      this.productImage = product.imageUrl
+        ? environment.imagesBaseUrl + product.imageUrl.replace(/^.*[\\\/]/, '')
+        : 'assets/images/default-product.png';
       
       // this.productImage = product.imageUrl ?? 'assets/images/default-product.png';
       this.productDescription = product.description ?? 'אין תיאור זמין';
@@ -161,7 +155,7 @@ loadProduct() {
         productId: this.currentProduct.productId,
         name: this.productName,
         price: this.productPrice,
-        imageUrl:(this.productImage).substring(15),
+        imageUrl: this.productImage.replace(/^.*[\\\/]/, ''),
         color: this.selectedColor,
         customText: this.userText || 'ללא כיתוב'
       };
@@ -208,7 +202,7 @@ saveProduct() {
     productName: this.productName,
     price: this.productPrice,
     description: this.productDescription,
-    imageUrl: this.productImage.substring(15,this.productImage.length),
+    imageUrl: this.productImage.replace(/^.*[\\\/]/, ''),
     colors: [...this.colors],
     toptext: this.currentProduct?.toptext || 'באהבה גדולה',
     // כאן התיקון הקריטי עבור ה-C#
@@ -227,6 +221,7 @@ saveProduct() {
     this.productService.updateProduct(this.productId, productData).subscribe({
       next: (res) => {
         this.currentProduct = res;
+        this.productImage = environment.imagesBaseUrl + productData.imageUrl;
         this.isEditing = false;
         Swal.fire('עודכן!', 'השינויים נשמרו בהצלחה', 'success');
       },
@@ -271,11 +266,14 @@ saveProduct() {
   // --- ניהול צבעים ותמונה ---
   onFileSelect(event: any) {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => this.productImage = e.target.result;
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    this.productService.uploadImage(file).subscribe({
+      next: (fileName) => {
+        this.productImage = environment.imagesBaseUrl + fileName;
+        this.cdr.detectChanges();
+      },
+      error: () => Swal.fire('שגיאה', 'העלאת התמונה נכשלה', 'error')
+    });
   }
 
   addColor(newColor: string) {
@@ -329,6 +327,10 @@ editProduct() {
         timer: 2000
       });
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/products']);
   }
 
   cancelEdit() {

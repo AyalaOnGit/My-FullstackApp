@@ -1,11 +1,12 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common'; // הוספנו CommonModule
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { Cart } from '../../services/cart';
 import { ProductDTO } from '../../models/product.model';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-card',
@@ -17,6 +18,7 @@ import Swal from 'sweetalert2';
 export class ProductCardMin {
   private router = inject(Router);
   private cartService = inject(Cart);
+  imgBase = environment.imagesBaseUrl;
 
   @Input() isAdmin: boolean = false;
   @Input() productData!: ProductDTO;

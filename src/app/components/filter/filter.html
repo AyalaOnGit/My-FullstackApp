@@ -32,15 +32,14 @@
       (onInput)="updateFilter('maxPrice', $event.value)">
     </p-inputNumber>
 
-    <!-- <p-select 
+    <p-select 
       [options]="categories" 
-      optionLabel="categoryName" 
-      optionValue="categoryName"
+      optionLabel="categoryName"
       placeholder="בחר קטגוריה" 
       class="w-full md:w-auto"
       [(ngModel)]="filterState.category"
       (onChange)="updateFilter('category', $event.value)">
-    </p-select> -->
+    </p-select>
 
     <p-button 
       icon="pi pi-filter-slash" 

@@ -1,11 +1,13 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    direction: rtl;
-    font-family: sans-serif;
-
+.back-btn-container {
+    padding: 15px 40px 0;
 }
+
+.back-btn-container .admin-btn {
+    width: auto;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+}
+
 
 .product-page{
     padding-top: 150px;

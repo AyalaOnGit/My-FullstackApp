@@ -65,7 +65,7 @@
               <div class="order-scroll max-h-12rem overflow-y-auto px-1">
                 @for (item of cartItems; track $index) {
                   <div class="flex align-items-center gap-3 mb-3">
-                    <img [src]="item.imageUrl" class="w-2rem h-2rem border-round object-fit-cover shadow-1">
+                    <img [src]="'http://localhost:5222/productsImages/' + item.imageUrl" class="w-2rem h-2rem border-round object-fit-cover shadow-1">
                     <div class="flex-grow-1 overflow-hidden text-right">
                       <span class="block font-bold text-xs text-800 white-space-nowrap overflow-hidden text-overflow-ellipsis">{{item.name}}</span>
                       <small class="text-500">{{item.quantity}} יח'</small>

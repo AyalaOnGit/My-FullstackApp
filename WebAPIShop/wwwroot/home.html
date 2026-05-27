@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="home.js" defer></script>
+    <title>webApi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .cont {
+            display: flex;
+            background-color: #ffffff;
+            padding: 40px;
+            padding-left: 90px;
+            padding-right: 90px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        .newUser, .existUser {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 250px;
+        }
+        .newUser h3, .existUser h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+        label {
+            font-size: 0.9em;
+            margin-bottom: 4px;
+            color: #555555;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+            .updateUser input:focus {
+                border-color: darkcyan;
+                box-shadow: 0 0 5px rgba(0, 139, 139, 0.3);
+            }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color:darkcyan;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+            button:hover {
+                background-color: rgba(0, 139, 139, 0.7);
+                transform: translateY(-2px);
+            }
+        .show {
+            appearance: none;
+            width: 100%;
+            height: 20px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+            .show::-webkit-progress-bar {
+                background-color: #eee; 
+                border-radius: 8px;
+            }
+            .show::-webkit-progress-value {
+                background-color: rgba(0, 139, 139, 0.7);
+                border-radius: 8px;
+            }
+        .PasswordStrengthBTN {
+            background-color: rgba(0, 139, 139, 0.6);
+            margin-top: 1px;
+            padding: 7px 17px;
+            border-radius: 8px;
+        }
+            .PasswordStrengthBTN:hover {
+                background-color: rgba(0, 139, 139, 0.4);
+            }
+        .regi{
+            margin-top:10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .switch span {
+            color: darkcyan;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="cont">
+        <div class="newUser hidden">
+            <h3>משתמש חדש</h3>
+            <lable for="userName">שם משתמש</lable>
+            <input class="gg" type="email" id="userName" name="userName" required />
+            <lable for="firstName">שם פרטי</lable>
+            <input type="text" id="firstName" name="firstName" required />
+            <lable for="lastName">שם משפחה</lable>
+            <input type="text" id="lastName" name="lastName" required />
+            <lable for="password">סיסמא</lable>
+            <input type="password" id="password" name="password" required />
+            <div class="showStrength">
+                <button class="PasswordStrengthBTN" onClick="PasswordStrength()"> בדיקת חוזק סיסמא</button>
+                <progress class="show" max="100"></progress>
+            </div>
+            <button class="regi" onClick="register()">הרשם</button>
+            <p class="switch">כבר יש לך משתמש? <span onClick="toggleForms()">להתחברות</span></p>
+        </div>
+       
+        <div class="existUser">
+            <h3>משתמש רשום</h3>
+            <lable for="userNameR">שם משתמש</lable>
+            <input type="email" id="userNameR" required />
+            <lable for="passwordR">סיסמא</lable>
+            <input type="password" id="passwordR" required />
+            <button onClick="login()">התחבר</button>
+            <p class="switch">חדש כאן? <span onclick="toggleForms()">הרשם עכשיו</span></p>
+        </div>
+
+    </div>
+</body>
+</html>

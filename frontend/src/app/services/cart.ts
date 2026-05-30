@@ -59,12 +59,12 @@ updateQuantity(product: any, delta: number) {
   }
 
   removeItem(product: any) {
-    // אנחנו אומרים למערך: תשמור רק את מי ש-לא- שווה למוצר שבחרנו
     this.items = this.items.filter(item => 
       !(item.name === product.name && 
         item.color === product.color && 
         item.customText === product.customText)
     );
+    this.saveToLocalStorage();
   }
   get totalItemsCount(): number {
     return this.items.reduce((total, item) => total + item.quantity, 0);

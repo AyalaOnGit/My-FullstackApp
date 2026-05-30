@@ -143,3 +143,22 @@
 }
 .chat-input button:hover { filter: brightness(1.08); }
 .chat-input button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.product-link {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  background: rgba(97, 198, 203, 0.15);
+  color: #3da8ad;
+  border: 1px solid rgba(97, 198, 203, 0.4);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.product-link:hover {
+  background: #61c6cb;
+  color: white;
+}

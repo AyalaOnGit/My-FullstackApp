@@ -49,21 +49,21 @@ export class ProductCardComponent implements OnInit {
   userText: string = '';
   showToast: boolean = false;
   isEditing: boolean = false;
+  productNotFound = false;
   originalProductSnapshot!: string;
 
   ngOnInit() {
-    this.loadCategories();
-  
-    // במקום snapshot, אנחנו עושים subscribe לשינויים בפרמטרים
     this.route.paramMap.subscribe(params => {
       const idFromRoute = params.get('id');
       this.productId = idFromRoute ? Number(idFromRoute) : 0;
   
       if (this.productId === 0) {
         this.prepareForNewProduct();
+        this.loadCategories();
       } else {
-        this.isEditing = false; // מוודא שאנחנו לא במצב עריכה כשעוברים למוצר קיים
+        this.isEditing = false;
         this.loadProduct();
+        this.loadCategories(); // טוען קטגוריות ברקע, לא חוסם את התצוגה
       }
     });
   }
@@ -91,28 +91,23 @@ export class ProductCardComponent implements OnInit {
 loadProduct() {
   this.productService.getProductById(this.productId).subscribe({
     next: (product) => {
-      console.log('המוצר שהגיע מהשרת:', product);
       this.currentProduct = product;
       this.productName = product.productName;
       this.productPrice = product.price;
-
       this.productImage = product.imageUrl
         ? environment.imagesBaseUrl + product.imageUrl.replace(/^.*[\\\/]/, '')
         : 'assets/images/default-product.png';
-      
-      // this.productImage = product.imageUrl ?? 'assets/images/default-product.png';
       this.productDescription = product.description ?? 'אין תיאור זמין';
       this.colors = product.colors ? [...product.colors] : [];
-      
-      // כאן תיקנתי מ-value ל-categoryName (בהתאם ל-DTO בשרת)
       const categoryObj = product.category as any;
-      
       if (categoryObj) {
-        // עכשיו הוא ייתן לך להשתמש ב-categoryName בלי לצעוק
         this.selectedCategoryName = categoryObj.categoryName || '';
       }
-      
-      this.cdr.detectChanges(); 
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.productNotFound = true;
+      this.cdr.detectChanges();
     }
   });
 }

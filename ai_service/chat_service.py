@@ -38,7 +38,14 @@ SYSTEM_PROMPT = (
     '9. NAVIGATION: If the user asks to go to a page or wants to see products/contact/about, '
     'first ask them warmly if they would like you to take them there. '
     'Only if they confirm (yes/sure/okay or similar) — add at the very end of your reply: [NAVIGATE:/route] '
-    'Available routes: /products (store), /connect-us (contact us), /about (about us), /cart (shopping cart).\n'
+    'Available routes: /products (store), /connect-us (contact us), /about (about us), /cart (shopping cart). '
+    'IMPORTANT: Do not add any text after the tag.\n'
+    '10. PRODUCT LINKS: After suggesting specific products, ask the user warmly if they want to see them. '
+    'Only if they confirm — you MUST add at the very end of your reply EXACTLY this tag: [NAVIGATE:/products?q=PRODUCT_NAME] '
+    'Replace PRODUCT_NAME with the exact Hebrew product name from the list. '
+    'CRITICAL: NEVER navigate before the user confirms. NEVER add the tag in the same message as the question. '
+    'Step 1 (suggest + ask): suggest products and ask "רוצה שאעביר אותך לראות את המוצר?" — NO tag here. '
+    'Step 2 (after yes): short warm reply + [NAVIGATE:/products?q=ספל מאג קרמי] — tag goes here only, nothing after it.\n'
     '\n'
     'OUTPUT FORMAT FOR SUGGESTIONS (translate labels to the user\'s language):\n'
     '- אפשרות א\': [product name and price from the list] - [one sentence on how this gift will touch the recipient\'s heart]\n'
@@ -92,7 +99,8 @@ async def chat(req: ChatRequest):
         catalog_lines = []
         for p in req.products:
             stock = 'in stock' if p.get('inStock') else 'out of stock'
-            line = f"- {p['name']} (₪{p['price']}) [{stock}]: {p.get('description', '')}"
+            pid = p.get('productId', '')
+            line = f"- [ID:{pid}] {p['name']} (₪{p['price']}) [{stock}]: {p.get('description', '')}"
             catalog_lines.append(line)
         catalog = '\n'.join(catalog_lines)
         full_prompt = SYSTEM_PROMPT + f'\n\nAvailable products:\n{catalog}\n\nOnly recommend products from this list.'

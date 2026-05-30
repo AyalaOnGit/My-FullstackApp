@@ -123,8 +123,14 @@
         </div>
     </div>
 
-    <div *ngIf="!currentProduct && !isEditing" class="loading-container">
+    <div *ngIf="!currentProduct && !isEditing && !productNotFound" class="loading-container">
         <div class="spinner"></div>
         <p>טוען נתונים...</p>
+    </div>
+
+    <div *ngIf="productNotFound" class="loading-container">
+        <i class="pi pi-exclamation-circle" style="font-size: 3rem; color: #94a3b8;"></i>
+        <p>המוצר לא נמצא</p>
+        <button class="admin-btn" (click)="goBack()">חזרה לחנות</button>
     </div>
 </div>

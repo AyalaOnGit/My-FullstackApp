@@ -13,6 +13,17 @@
     <a routerLink="/connect-us" routerLinkActive="active">צור קשר</a>
   </div>
 
+  <div class="header-search">
+    <i class="pi pi-search cursor-pointer"
+       (click)="onSearch()"></i>
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (keydown)="onSearchKey($event)"
+      (ngModelChange)="onSearchInput()"
+      placeholder="חפש מתנה..." />
+  </div>
+
   <div class="actions">
     <div class="profile-wrapper">
       <div class="profile-btn">

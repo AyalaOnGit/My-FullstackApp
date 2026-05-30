@@ -9,9 +9,9 @@
        [alt]="productData.productName" 
        class="product-full-image">
 
-  <img *ngIf="!productData.imageUrl" 
-       src="assets/images/default-product.png" 
-       class="product-full-image">
+  <div *ngIf="!productData.imageUrl" class="no-image-placeholder">
+    <i class="pi pi-image"></i>
+  </div>
 </div>
   </ng-template>
 

@@ -4,21 +4,44 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Cart } from '../../services/cart';
 import { UserService } from '../../services/user.service';
+import { SearchStateService } from '../../services/search-state.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MenuModule, RouterLink, RouterLinkActive, ButtonModule],
+  imports: [CommonModule, FormsModule, MenuModule, RouterLink, RouterLinkActive, ButtonModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header implements OnInit {
   private router = inject(Router);
-  public userService = inject(UserService); 
+  public userService = inject(UserService);
   public cart = inject(Cart);
+  private searchState = inject(SearchStateService);
+
+  searchQuery = '';
+
+  onSearch() {
+    const q = this.searchQuery.trim();
+    if (q.length > 2) {
+      this.router.navigate(['/products']);
+      this.searchState.search(q);
+    }
+  }
+
+  onSearchKey(e: KeyboardEvent) {
+    if (e.key === 'Enter') this.onSearch();
+  }
+
+  onSearchInput() {
+    if (this.searchQuery.length === 0) {
+      this.searchState.clear();
+    }
+  }
 
   // שימוש ב-computed כדי שהתפריט יתעדכן אוטומטית כשהמשתמש מתחבר/מתנתק
   profileMenuItems = computed<MenuItem[]>(() => {
@@ -105,9 +128,7 @@ export class Header implements OnInit {
     });
   }
 
-  ngOnInit() {
-    // אין צורך לאתחל כאן את profileMenuItems כי הוא מוגדר כ-computed
-  }
+  ngOnInit() {}
 
   addNewProduct() {
     const productId = 0;

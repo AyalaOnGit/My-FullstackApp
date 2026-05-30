@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, inject, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -28,6 +28,10 @@ export class Filter implements OnInit {
   };
 
   @Output() onFilterChange = new EventEmitter<any>();
+  @Output() onSemanticSearch = new EventEmitter<string>();
+  @Input() set initialQuery(val: string) {
+    this.filterState.name = '';
+  }
 
   ngOnInit() {
     this.categoryService.getCategories().pipe(
@@ -42,9 +46,14 @@ export class Filter implements OnInit {
 
   updateFilter(field: string, value: any) {
     (this.filterState as any)[field] = value;
-    
-    // סינון אוטומטי בשינוי קטגוריה או מחיר
     if (field !== 'name') {
+      this.applyFilters();
+    }
+  }
+
+  onNameInput(value: string) {
+    this.filterState.name = value;
+    if (value.trim().length === 0) {
       this.applyFilters();
     }
   }

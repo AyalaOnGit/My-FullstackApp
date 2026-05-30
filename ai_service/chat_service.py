@@ -35,8 +35,10 @@ SYSTEM_PROMPT = (
     '6. FOLLOW-UP: End every reply with ONE warm, curious question about the recipient\'s personality, '
     'the occasion, or the bond — to deepen the connection and refine the recommendation.\n'
     '7. BREVITY: No more than 2-3 sentences of intro before the product suggestions.\n'
-    '8. EXPRESS & CUSTOM: If the user mentions being short on time or wanting a unique design, '
-    'highlight our express shipping and custom exclusive design service.\n'
+    '9. NAVIGATION: If the user asks to go to a page or wants to see products/contact/about, '
+    'first ask them warmly if they would like you to take them there. '
+    'Only if they confirm (yes/sure/okay or similar) — add at the very end of your reply: [NAVIGATE:/route] '
+    'Available routes: /products (store), /connect-us (contact us), /about (about us), /cart (shopping cart).\n'
     '\n'
     'OUTPUT FORMAT FOR SUGGESTIONS (translate labels to the user\'s language):\n'
     '- אפשרות א\': [product name and price from the list] - [one sentence on how this gift will touch the recipient\'s heart]\n'
@@ -68,10 +70,13 @@ class SearchRequest(BaseModel):
     products: list
     top_k: int = 5
 
+class CacheRequest(BaseModel):
+    products: list
+
 # ── EMBEDDING HELPERS ────────────────────────────────────────
 def get_embedding(text: str) -> list[float]:
     response = client.embeddings.create(
-        model='text-embedding-3-small',
+        model='text-embedding-3-large',
         input=text
     )
     return response.data[0].embedding
@@ -100,12 +105,25 @@ async def chat(req: ChatRequest):
     messages.append({'role': 'user', 'content': req.message})
 
     response = client.chat.completions.create(
-        model='gpt-4o',
+        model='gpt-4o-mini',
         messages=messages,
         max_tokens=500,
         temperature=0.7
     )
     return {'reply': response.choices[0].message.content}
+
+# ── EMBEDDINGS CACHE ─────────────────────────────────────────
+product_embeddings_cache: dict = {}
+
+@app.post('/cache-products')
+async def cache_products(req: CacheRequest):
+    global product_embeddings_cache
+    product_embeddings_cache = {}
+    for p in req.products:
+        key = p.get('name', '')
+        text = f"{p.get('name', '')} {p.get('description', '')}"
+        product_embeddings_cache[key] = get_embedding(text)
+    return {'cached': len(product_embeddings_cache)}
 
 # ── SEARCH ENDPOINT ──────────────────────────────────────────
 @app.post('/search')
@@ -113,14 +131,35 @@ async def search(req: SearchRequest):
     if not req.products:
         return {'results': []}
 
+    # אם השאילתה קצרה מדי או נראית כג'יבריש (אין רווחים) — לא נחפש
+    words = req.query.strip().split()
+    if len(words) == 1 and len(req.query.strip()) < 3:
+        return {'results': []}
+
     query_embedding = get_embedding(req.query)
 
     scored = []
     for p in req.products:
-        product_text = f"{p.get('name', '')} {p.get('description', '')}"
-        product_embedding = get_embedding(product_text)
+        key = p.get('name', '')
+        if key in product_embeddings_cache:
+            product_embedding = product_embeddings_cache[key]
+        else:
+            text = f"{p.get('name', '')} {p.get('description', '')}"
+            product_embedding = get_embedding(text)
         score = cosine_similarity(query_embedding, product_embedding)
-        scored.append({**p, 'score': round(score, 3)})
+        scored.append({
+            'productId': p.get('productId'),
+            'name': p.get('name', ''),
+            'price': p.get('price'),
+            'description': p.get('description', ''),
+            'category': p.get('category', ''),
+            'imageUrl': p.get('imageUrl', ''),
+            'colors': p.get('colors', []),
+            'toptext': p.get('toptext', ''),
+            'inStock': p.get('inStock', True),
+            'score': round(score, 3)
+        })
 
     results = sorted(scored, key=lambda x: x['score'], reverse=True)
-    return {'results': results[:req.top_k]}
+    relevant = [r for r in results if r['score'] >= 0.32]
+    return {'results': relevant[:req.top_k]}

@@ -156,6 +156,43 @@ $light-bg: #f8fafc;
   }
 }
 
+/* --- שדה חיפוש ב-Header --- */
+.header-search {
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  border: 1.5px solid transparent;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border-color: $primary-cyan;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(97, 198, 203, 0.15);
+  }
+
+  .search-icon {
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+    &:hover { color: $primary-cyan; }
+  }
+
+  input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.9rem;
+    width: 160px;
+    color: $dark-blue;
+    direction: rtl;
+    &::placeholder { color: #94a3b8; }
+  }
+}
+
 /* --- כפתור עגלת קניות --- */
 .cart-btn {
   ::ng-deep .p-button {

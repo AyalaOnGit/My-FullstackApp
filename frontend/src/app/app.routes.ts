@@ -10,7 +10,8 @@ import { About } from './components/about/about';
 import { ConnectUs } from './components/connect-us/connect-us';
 
 export const routes: Routes = [
-    { path: '', component: ProductsPage }, // דף הבית
+    { path: '', component: ProductsPage },
+    { path: 'products', component: ProductsPage },
     { path: 'cart', component: CartPage },  // דף העגלה
     { path: 'profile', component: UserProfile },  // דף העגלה
    

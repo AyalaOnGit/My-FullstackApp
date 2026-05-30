@@ -6,10 +6,11 @@
       <input 
         pInputText 
         type="text" 
-        placeholder="חיפוש לפי שם..." 
+        placeholder="חיפוש חכם..." 
         class="w-full"
         [(ngModel)]="filterState.name"
-        (keydown.enter)="applyFilters()" /> 
+        (ngModelChange)="onNameInput($event)"
+        (keydown.enter)="applyFilters()" />
     </span>
 
     <p-inputNumber 

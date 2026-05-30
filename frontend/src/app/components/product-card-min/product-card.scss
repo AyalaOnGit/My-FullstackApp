@@ -1,97 +1,56 @@
-.product-image-container {
-    width: 100%;
-    height: 300px; /* גובה אחיד לכל התמונות */
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--surface-100);
-    border-radius: 6px 6px 0 0;
-
-    .product-full-image {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: cover; /* שומר על יחס התמונה בלי לעוות אותה */
-        transition: transform 0.3s ease;
-    }
-}
-/* עיצוב המיכל העליון של הכרטיס */
-.product-header-full {
-    width: 100%;
-    height: 300px; /* תוכלי לשנות את הגובה לפי הצורך */
-    overflow: hidden; /* מבטיח שהתמונה לא תצא מהגבולות המעוגלים */
-    border-radius: 12px 12px 0 0; /* מעגל רק את הפינות העליונות (תואם לכרטיס) */
-    margin: 0;
-    padding: 0;
-  }
-  
-  .product-full-image {
-    width: 100%;
-    margin-bottom: 20px;
-    height: 100%;
-    object-fit: cover; /* פקודה קריטית: התמונה תמלא את כל השטח ותיחתך בצדדים במקום להימתח */
-    display: block;
-  }
-  
-  /* במידה ואת משתמשת ב-p-card של PrimeNG, צריך לבטל לו את ה-padding ב-header */
-  :host ::ng-deep .p-card .p-card-header {
-    padding: 0;
-    margin: 0;
-  }
-/* אפקט קטן כשמרחפים על הכרטיס */
-.custom-card:hover .product-full-image {
-    transform: scale(1.05);
-}
-// .custom-card{
-//     background-color: aquamarine;
-//     // height: 500px;
-//     // width: 400px;
-// }
-
-/* הגדרת גובה קבוע לכרטיס */
-:host ::ng-deep .custom-card {
-  height: 100%; /* מאפשר לכרטיס למלא את גובה העמודה שלו */
+.no-image-placeholder {
+  width: 100%;
+  height: 250px;
+  background: #f1f5f9;
   display: flex;
-  flex-direction: column;
-}
-
-:host ::ng-deep .p-card {
-  height: 100%; /* שהכרטיס הפנימי יתפוס את כל הגובה */
-  display: flex;
-  flex-direction: column;
-  
-  /* הופך את גוף הכרטיס לגמיש כדי שידחוף את הפוטר למטה */
-  .p-card-body {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* דוחף את התוכן למעלה ואת הפוטר למטה */
-  }
-
-  .p-card-content {
-      flex-grow: 1; /* דואג שמרכז הכרטיס יתפוס את השטח הנותר */
-      padding-top: 0;
-  }
-  
-  .p-card-header {
-      padding: 0;
-      margin: 0;
-  }
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px 6px 0 0;
+  .pi-image { font-size: 3rem; color: #cbd5e1; }
 }
 
 .product-image-container {
   width: 100%;
-  height: 250px; /* גובה קבוע לתמונה */
+  height: 250px;
   overflow: hidden;
   background-color: var(--surface-100);
   border-radius: 6px 6px 0 0;
 
   .product-full-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* חותך את התמונה במקום למתוח אותה */
-      transition: transform 0.3s ease;
-      display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    display: block;
+  }
+}
+
+:host ::ng-deep .custom-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+:host ::ng-deep .p-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .p-card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .p-card-content {
+    flex-grow: 1;
+    padding-top: 0;
+  }
+
+  .p-card-header {
+    padding: 0;
+    margin: 0;
   }
 }
 

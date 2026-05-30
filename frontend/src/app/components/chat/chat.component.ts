@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ChatService } from '../../services/chat.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class ChatComponent {
   loading = false;
   isOpen = false;
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private router: Router) {}
 
   send() {
     if (!this.input.trim() || this.loading) return;
@@ -27,7 +28,16 @@ export class ChatComponent {
 
     this.chatService.send(msg, this.messages.slice(0, -1)).subscribe({
       next: res => {
-        this.messages.push({ role: 'assistant', content: res.reply });
+        const reply = res.reply;
+        const navMatch = reply.match(/\[NAVIGATE:(\/[^\]]+)\]/);
+        const cleanReply = reply.replace(/\[NAVIGATE:\/[^\]]+\]/g, '').trim();
+        this.messages.push({ role: 'assistant', content: cleanReply });
+        if (navMatch) {
+          setTimeout(() => {
+            this.router.navigate([navMatch[1]]);
+            this.isOpen = false;
+          }, 1500);
+        }
         this.loading = false;
       },
       error: () => this.loading = false

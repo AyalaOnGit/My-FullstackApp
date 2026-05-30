@@ -3,7 +3,13 @@
 </button>
 
 <div class="chat-window" *ngIf="isOpen">
-  <div class="chat-header">AI Shopping Assistant</div>
+  <div class="chat-header">
+    <img src="logo1.png" alt="GiftForU" />
+    <span>
+      Maya
+      <small class="subtitle">יועצת מתנות אישית</small>
+    </span>
+  </div>
 
   <div class="chat-messages">
     <div *ngFor="let m of messages" [class]="'msg ' + m.role">

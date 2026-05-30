@@ -22,10 +22,14 @@ namespace WebAPIShop.Controllers
             var products = await _productService.GetProducts(null, null, null, null, 50, null, 1);
 
             var productList = products.Data.Select(p => new {
+                productId = p.ProductId,
                 name = p.ProductName,
                 price = p.Price,
                 description = p.Description,
                 category = p.Category?.CategoryName,
+                imageUrl = p.ImageUrl,
+                colors = p.Colors,
+                toptext = p.Toptext,
                 inStock = true
             }).ToList();
 

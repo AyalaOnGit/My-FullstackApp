@@ -77,4 +77,27 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// טעינת embeddings לכל המוצרים בעליית השרת
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var productService = scope.ServiceProvider.GetRequiredService<IPrudectsService>();
+        var http = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient();
+        var products = await productService.GetProducts(null, null, null, null, 200, null, 1);
+        var productList = products.Data.Select(p => new {
+            productId = p.ProductId,
+            name = p.ProductName,
+            price = p.Price,
+            description = p.Description,
+            category = p.Category?.CategoryName,
+            imageUrl = p.ImageUrl,
+            colors = p.Colors,
+            toptext = p.Toptext
+        }).ToList();
+        await http.PostAsJsonAsync("http://localhost:8001/cache-products", new { products = productList });
+    }
+    catch { /* אם Python עדיין לא רץ בזמן עליית .NET — לא נכשל */ }
+}
+
 app.Run();

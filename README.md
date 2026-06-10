@@ -143,5 +143,8 @@ dotnet test
 MIT License
 
 ---
+![צילום מסך של האתר1](/frontend/public/1.png)
+![צילום מסך של האתר2](/frontend/public/2.png)
+---
 **Ayala**
 <small>2026</small>

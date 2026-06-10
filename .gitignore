@@ -1,0 +1,58 @@
+# ===== .NET / C# =====
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.swp
+*.log
+*.json.log
+logger*.json
+appsettings.Development.json
+appsettings.Production.json
+
+# ===== סודות / מפתחות =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+.pytest_cache/
+
+# ===== Node / Angular =====
+node_modules/
+/frontend/dist/
+/frontend/tmp/
+/frontend/out-tsc/
+/frontend/.angular/cache/
+npm-debug.log
+yarn-error.log
+
+# ===== Docker =====
+# לא מעלים volumes של docker
+docker-data/
+
+# ===== IDE =====
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini

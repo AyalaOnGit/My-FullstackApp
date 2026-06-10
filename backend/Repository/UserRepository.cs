@@ -30,10 +30,8 @@ namespace Repository
 
         public async Task<User> Login(string email, string password)
         {
-
-            User? user = await _dbSHOPContext.Users.FirstOrDefaultAsync(x=>x.UserEmail==email &&
-            x.UserPassword==password);
-
+            // BCrypt verification is done in the Service layer
+            User? user = await _dbSHOPContext.Users.FirstOrDefaultAsync(x => x.UserEmail == email);
             return user;
         }
 

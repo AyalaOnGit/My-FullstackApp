@@ -48,6 +48,10 @@ public class PrudectsService : IPrudectsService
     // Servers/PrudectsService.cs
     public async Task<ProductDTO> AddProduct(ProductDTO productDto)
     {
+        var existing = await _productRepository.GetProductByName(productDto.ProductName);
+        if (existing != null)
+            throw new InvalidOperationException($"מוצר בשם '{productDto.ProductName}' כבר קיים");
+
         var product = _mapper.Map<ProductDTO, Product>(productDto);
 
         // שליפת הקטגוריה לפי השם שמגיע מהאנגולר

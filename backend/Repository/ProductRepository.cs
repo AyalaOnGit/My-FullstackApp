@@ -85,6 +85,13 @@ namespace Repository
             return product;
         }
 
+        public async Task<Product> GetProductByName(string name)
+        {
+            return await _dbSHOPContext.Products
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.ProductName == name);
+        }
+
         public async Task UpdateProduct(int id, Product product)
         {
             product.ProductId = id; // מבטיח שה-ID מעודכן

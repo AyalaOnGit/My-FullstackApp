@@ -10,5 +10,6 @@ namespace Repository
         Task DeleteProduct(int id);
         Task<Product> AddProduct(Product product);
         Task UpdateProduct(int id, Product product);
+        Task<Product> GetProductByName(string name);
     }
 }

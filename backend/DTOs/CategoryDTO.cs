@@ -7,5 +7,8 @@ using System.Threading.Tasks;
 namespace DTOs
 {
 
-    public record CategoryDTO(string CategoryName);
+    public record CategoryDTO(string CategoryName)
+    {
+        public CategoryDTO() : this(string.Empty) { }
+    }
 }

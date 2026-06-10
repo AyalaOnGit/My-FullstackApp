@@ -1,13 +1,7 @@
-﻿using DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DTOs
 {
-    public record ProductDTO(int ProductId,
+    public record ProductDTO(
+        int ProductId,
         string ProductName,
         double Price,
         string? Description,
@@ -16,7 +10,3 @@ namespace DTOs
         string Toptext,
         CategoryDTO Category);
 }
-//this.productService.getProducts().subscribe((response: PageResponse<ProductDTO>) => {
-//    this.products = response.data;
-//    this.totalCount = response.totalItems;
-//});

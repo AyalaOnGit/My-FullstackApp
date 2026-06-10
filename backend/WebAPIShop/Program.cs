@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Repository;
 using Servers;
 using Entitys;
@@ -6,25 +6,26 @@ using NLog.Web;
 using Services;
 using WebAPIShop;
 using WebAPIShop.Middleware;
+using WebAPIShop.Extensions;
 using Microsoft.AspNetCore.Builder;
 using PresidentsApp.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
-
-builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IPrudectsService, PrudectsService>();
-
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
-
 
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 
@@ -36,38 +37,92 @@ builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-// Add services to the container.
 
-// הוספת שירות CORS
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
-        policy => policy.WithOrigins("http://localhost:4200") // הכתובת של אנגולר
+        policy => policy.WithOrigins("http://localhost:4200")
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .AllowCredentials());
 });
+
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddCustomRateLimiter();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        In = ParameterLocation.Header,
+        Description = "הכנס את ה-JWT token"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            new string[] {}
+        }
+    });
+});
 
 var app = builder.Build();
 
-
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/openapi/v1.json", "My API V1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "GiftForU API V1");
     });
 }
-// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.UseCors("AllowAngular");
+
+app.UseRouting();
+
+// מחלץ את ה-token מה-cookie ומוסיף כ-Bearer
+app.Use(async (context, next) =>
+{
+    var token = context.Request.Cookies["jwt"];
+    if (!string.IsNullOrEmpty(token))
+        context.Request.Headers["Authorization"] = $"Bearer {token}";
+    await next();
+});
+
+app.UseAuthentication();
+
+app.UseRateLimiter();
 
 app.UseErrorHandlingMiddleware();
 

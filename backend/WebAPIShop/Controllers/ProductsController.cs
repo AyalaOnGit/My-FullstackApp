@@ -43,34 +43,40 @@ namespace WebAPIShop.Controllers
             if (product == null) return NotFound();
             return Ok(product);
         }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            // בדיקה שהמוצר קיים לפני מחיקה
-            var product = await _prudectsService.GetProductById(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            await _prudectsService.DeleteProduct(id);
-            return NoContent(); // מחזיר קוד 204 (הצליח אבל אין תוכן להחזיר)
-        }
-        // WebAPIShop/Controllers/ProductsController.cs
-
         [HttpPost]
+        [AdminOnly]
         public async Task<ActionResult<ProductDTO>> Create([FromBody] ProductDTO productDto)
         {
-            var createdProduct = await _prudectsService.AddProduct(productDto);
-            return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                var createdProduct = await _prudectsService.AddProduct(productDto);
+                return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
+        [AdminOnly]
         public async Task<ActionResult<ProductDTO>> Update(int id, [FromBody] ProductDTO productDto)
         {
-            if (id != productDto.ProductId) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (id != productDto.ProductId) return BadRequest("ID mismatch");
             await _prudectsService.UpdateProduct(id, productDto);
             return Ok(productDto);
+        }
+
+        [HttpDelete("{id}")]
+        [AdminOnly]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var product = await _prudectsService.GetProductById(id);
+            if (product == null) return NotFound();
+            await _prudectsService.DeleteProduct(id);
+            return NoContent();
         }
 
 

@@ -1,8 +1,9 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { FormGroup, ReactiveFormsModule,FormControl, Validators, AbstractControl} from '@angular/forms';
+import { FormGroup, ReactiveFormsModule,FormControl, Validators} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,6 @@ export class LoginComponent {
 
   private userService=inject(UserService);
   private router=inject(Router);
-  
 
   switchToRegister(){
     this.switchMode.emit();
@@ -39,26 +39,46 @@ export class LoginComponent {
       this.userService.login(email, password).subscribe({
         next: (user) => {
           if (user) {
-            // בדיקה אם אדמין דרך הסיגנל המחושב בסרביס
-            if (this.userService.isAdmin()) {
-              console.log("ברוך הבא אדמין!");
-            } else {
-              console.log("ברוך הבא לקוח!");
-            }
-            this.router.navigate(['/home']);
+            const name = user.userFirstName ?? user.UserFirstName ?? '';
+            const isAdmin = this.userService.isAdmin();
+            Swal.fire({
+              title: isAdmin ? `ברוך הבא, ${name} 👑` : `שלום, ${name}! 😊`,
+              text: isAdmin ? 'נכנסת כמנהל' : 'נכנסת בהצלחה',
+              icon: 'success',
+              iconColor: '#46d9e1',
+              confirmButtonColor: '#46d9e1',
+              timer: 1500,
+              showConfirmButton: false
+            }).then(() => this.router.navigate(['/home']));
           } else {
-            // השרת החזיר NoContent (204) - כלומר המשתמש לא נמצא
-            alert("פרטים לא נכונים. אולי כדאי להירשם?");
+            Swal.fire({
+              title: 'פרטים לא נכונים',
+              text: 'אימייל או סיסמא שגויים',
+              icon: 'error',
+              confirmButtonColor: '#46d9e1'
+            });
           }
         },
         error: (err) => {
-          console.error("Login error:", err);
-          alert("אירעה שגיאה בחיבור לשרת.");
+          if (err.status === 401) {
+            Swal.fire({
+              title: 'פרטים לא נכונים',
+              text: 'אימייל או סיסמא שגויים',
+              icon: 'warning',
+              confirmButtonColor: '#46d9e1'
+            });
+          } else {
+            Swal.fire({
+              title: 'שגיאה',
+              text: 'אירעה שגיאה בחיבור לשרת',
+              icon: 'error',
+              confirmButtonColor: '#46d9e1'
+            });
+          }
         }
       });
     } else {
       this.loginForm.markAllAsTouched();
     }
   }
-
 }

@@ -30,6 +30,10 @@ export class OrderService {
     return this.http.get<OrderDTO[]>(this.apiUrl);
   }
 
+  getOrdersByUserId(userId: number): Observable<OrderDTO[]> {
+    return this.http.get<OrderDTO[]>(`${this.apiUrl}/user/${userId}`);
+  }
+
   /**
    * שליפת הזמנה ספציפית לפי מזהה מהשרת
    */

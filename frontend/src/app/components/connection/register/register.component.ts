@@ -6,6 +6,7 @@ import { Header } from '../../header1/header';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/user.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -58,27 +59,36 @@ export class RegisterComponent {
     return password===confirmPassword? null : { 'mismatch': true }; 
   }
 
+  successMessage: string = '';
+
   onSubmit(){
     if(this.registerForm.valid){
       const formValues=this.registerForm.value;
 
       const newUser: UserDTO = 
       {
-        UserId: 0,
-        UserEmail: formValues.email,
-        UserFirstName: formValues.firstName,
-        UserLastName: formValues.lastName,
-        Role: 'user'
+        userId: 0,
+        userEmail: formValues.email,
+        userFirstName: formValues.firstName,
+        userLastName: formValues.lastName,
+        role: 'user'
       };
       
       const password = formValues.password;
 
-      //קריאה לשרת
       this.userService.register(newUser,password).subscribe
       ({
         next: (user)=>{
-          console.log('Registration successful',user);
-          this.router.navigate(['/home']); 
+          const name = user.userFirstName ?? (user as any).UserFirstName ?? '';
+          Swal.fire({
+            title: `ברוך הבא, ${name}! ✨`,
+            text: 'נרשמת בהצלחה',
+            icon: 'success',
+            iconColor: '#46d9e1',
+            confirmButtonColor: '#46d9e1',
+            timer: 1500,
+            showConfirmButton: false
+          }).then(() => this.router.navigate(['/home']));
         },
         error: (err)=>{
           alert(err.error || 'שגיאה ברישום המשתמש');

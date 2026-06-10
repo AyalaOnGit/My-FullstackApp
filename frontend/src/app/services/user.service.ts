@@ -15,7 +15,10 @@ export class UserService {
   currentUser = signal<UserDTO | null>(this.getSavedUser());
 
   // מחושב - תמיד יתעדכן כש-currentUser משתנה
-  isAdmin = computed(() => this.currentUser()?.Role === 'admin' || (this.currentUser() as any)?.role === 'admin');
+  isAdmin = computed(() => {
+    const u = this.currentUser();
+    return u?.role === 'admin' || (u as any)?.Role === 'admin';
+  });
 
   constructor() { }
 

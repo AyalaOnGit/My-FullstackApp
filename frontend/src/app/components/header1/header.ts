@@ -90,7 +90,7 @@ export class Header implements OnInit {
     if (user) {
       Swal.fire({
         title: '?להתנתק',
-        text: `את/ה כבר מחובר למערכת בשם ${user.UserFirstName} ${user.UserLastName}`,
+        text: `את/ה כבר מחובר למערכת בשם ${user.userFirstName ?? user.UserFirstName} ${user.userLastName ?? user.UserLastName}`,
         icon: 'warning',
         iconColor: '#46d9e1',
         showCancelButton: true,

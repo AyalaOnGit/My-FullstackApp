@@ -3,6 +3,10 @@
         <h2>הרשמה</h2>
         <p class="subtitle">הצטרפו לחנות המתנות שלנו</p>
 
+        @if (successMessage) {
+            <div class="success-toast">{{ successMessage }}</div>
+        }
+
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <div class="name-row">
                 <div class="filed">

@@ -57,11 +57,11 @@ export class UserProfile implements OnInit {
         userId: user.UserId ?? (user as any).userId ?? 0,
         userFirstName: user.UserFirstName ?? (user as any).userFirstName ?? '',
         userLastName: user.UserLastName ?? (user as any).userLastName ?? '',
-        phon: user.Phon ?? (user as any).phon ?? '',
+        phon: user.phon ?? (user as any).Phon ?? '',
         userEmail: user.UserEmail ?? (user as any).userEmail ?? '',
-        address: user.Address ?? (user as any).address ?? '',
-        city: user.City ?? (user as any).city ?? '',
-        role: user.Role ?? (user as any).role ?? 'user'
+        address: user.address ?? (user as any).Address ?? '',
+        city: user.city ?? (user as any).City ?? '',
+        role: user.role ?? (user as any).Role ?? 'user'
       });
     }
   

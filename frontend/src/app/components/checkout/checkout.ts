@@ -71,7 +71,7 @@ export class CheckoutComponent implements OnInit {
     const newOrder = {
       OrderId: 0,
       OrderDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD עבור DateOnly
-      UserId: user.userId,
+      UserId: user.userId ?? user.UserId,
       OrderSum: this.totalPrice,
       Status: "באריזה",
       OrderItems: this.cartItems.map(item => ({

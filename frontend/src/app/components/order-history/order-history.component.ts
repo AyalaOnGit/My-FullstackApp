@@ -25,17 +25,14 @@ export class OrderHistoryComponent implements OnInit {
     const currentUser = this.userService.currentUser();
     if (!currentUser) return;
 
-    this.orderService.getOrders().subscribe({
-      next: (allOrders: any[]) => {
-        if (this.userService.isAdmin()) {
-          this.ordersHistory = allOrders;
-        } else {
-          // סינון הזמנות לפי מזהה משתמש נוכחי
-          this.ordersHistory = allOrders.filter(o => 
-            (o.UserId === currentUser.UserId) || (o.userId === currentUser.UserId)
-          );
-        }
-        this.cdr.detectChanges(); // וידוא רענון לאחר טעינה ראשונית
+    const orders$ = this.userService.isAdmin()
+      ? this.orderService.getOrders()
+      : this.orderService.getOrdersByUserId(currentUser.userId ?? currentUser.UserId!);
+
+    orders$.subscribe({
+      next: (orders: any[]) => {
+        this.ordersHistory = orders;
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('שגיאה בטעינת הזמנות:', err)
     });

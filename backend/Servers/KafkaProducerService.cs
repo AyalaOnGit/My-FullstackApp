@@ -20,7 +20,8 @@ public class KafkaProducerService : IKafkaProducerService, IDisposable
         var config = new ProducerConfig
         {
             BootstrapServers = configuration["Kafka:BootstrapServers"],
-            MessageTimeoutMs = 3000
+            MessageTimeoutMs = 3000,
+            SocketTimeoutMs = 2000
         };
 
         _producer = new ProducerBuilder<string, string>(config).Build();

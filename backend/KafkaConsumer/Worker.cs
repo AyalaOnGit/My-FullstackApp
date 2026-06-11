@@ -27,8 +27,8 @@ public class Worker : BackgroundService
             };
 
             using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-            consumer.Subscribe(_configuration["Kafka:Topic"]);
-            _logger.LogInformation("Kafka Consumer started, listening to topic '{Topic}'", _configuration["Kafka:Topic"]);
+            consumer.Subscribe(_configuration["Kafka:OrderTopic"]);
+            _logger.LogInformation("Kafka Consumer started, listening to topic '{Topic}'", _configuration["Kafka:OrderTopic"]);
 
             while (!stoppingToken.IsCancellationRequested)
             {

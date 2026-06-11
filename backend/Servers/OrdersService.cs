@@ -1,14 +1,10 @@
 namespace Servers;
 
-using System;
 using AutoMapper;
-using Confluent.Kafka;
 using DTOs;
 using Entitys;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Repository;
-using System.Text.Json;
 
 public class OrdersService : IOrdersService
 {
@@ -16,15 +12,15 @@ public class OrdersService : IOrdersService
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<OrdersService> _logger;
-    private readonly IConfiguration _configuration;
+    private readonly IKafkaProducerService _kafkaProducer;
 
-    public OrdersService(IOrderRepository orderRepository, IMapper mapper, IProductRepository productRepository, ILogger<OrdersService> logger, IConfiguration configuration)
+    public OrdersService(IOrderRepository orderRepository, IMapper mapper, IProductRepository productRepository, ILogger<OrdersService> logger, IKafkaProducerService kafkaProducer)
     {
         _orderRepository = orderRepository;
         _mapper = mapper;
         _productRepository = productRepository;
         _logger = logger;
-        _configuration = configuration;
+        _kafkaProducer = kafkaProducer;
     }
 
     public async Task<OrderDTO> GetOrderById(int id)
@@ -49,7 +45,7 @@ public class OrdersService : IOrdersService
 
         Order o = _mapper.Map<OrderDTO, Order>(order);
         OrderDTO createdOrder = _mapper.Map<Order, OrderDTO>(await _orderRepository.AddOrder(o));
-        await SendToKafkaAsync(createdOrder);
+        await _kafkaProducer.PublishOrderCreatedAsync(createdOrder);
         return createdOrder;
     }
 
@@ -73,25 +69,4 @@ public class OrdersService : IOrdersService
         return await _orderRepository.UpdateOrder(order);
     }
 
-    private async Task SendToKafkaAsync(OrderDTO order)
-    {
-        try
-        {
-            var config = new ProducerConfig
-            {
-                BootstrapServers = _configuration["Kafka:BootstrapServers"],
-                MessageTimeoutMs = 3000,
-                RequestTimeoutMs = 3000
-            };
-            var topic = _configuration["Kafka:Topic"];
-            using var producer = new ProducerBuilder<Null, string>(config).Build();
-            var message = JsonSerializer.Serialize(order);
-            await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
-            _logger.LogInformation("Order {OrderId} sent to Kafka topic '{Topic}'", order.OrderId, topic);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Failed to send order to Kafka: {Message}", ex.Message);
-        }
-    }
 }

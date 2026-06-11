@@ -46,7 +46,7 @@ services:
       - ConnectionStrings__Ayal=YOUR_DB_CONNECTION_STRING
       - ConnectionStrings__Redis=redis:6379,password=yourpassword
       - Kafka__BootstrapServers=kafka:9092
-      - Kafka__Topic=orders
+      - Kafka__OrderTopic=orders
       - Jwt__Key=GiftForU-SecretKey-2026-SuperSecure!
       - Jwt__Issuer=GiftForU
       - Jwt__Audience=GiftForUUsers
@@ -60,7 +60,7 @@ services:
       dockerfile: KafkaConsumer/Dockerfile
     environment:
       - Kafka__BootstrapServers=kafka:9092
-      - Kafka__Topic=orders
+      - Kafka__OrderTopic=orders
     depends_on:
       - kafka
 

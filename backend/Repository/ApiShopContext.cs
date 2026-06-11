@@ -43,7 +43,7 @@ public partial class dbSHOPContext : DbContext
             entity.Property(e => e.CategoryId).HasColumnName("CATEGORY_ID");
             entity.Property(e => e.CategoryName)
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("CATEGORY_NAME");
         });
 
@@ -55,7 +55,7 @@ public partial class dbSHOPContext : DbContext
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasDefaultValue("באריזה")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_Orders_STATUS")
 
@@ -76,7 +76,7 @@ public partial class dbSHOPContext : DbContext
 
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasDefaultValue(" ")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_Order_item_CUSTOMTEXT")
                 .HasColumnName("CUSTOMTEXT");
@@ -84,7 +84,7 @@ public partial class dbSHOPContext : DbContext
             entity.Property(e => e.Popularcolore)
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("POPULARCOLORE");
             entity.Property(e => e.ProductId).HasColumnName("PRODUCT_ID");
             entity.Property(e => e.Quantity).HasColumnName("QUANTITY");
@@ -107,27 +107,27 @@ public partial class dbSHOPContext : DbContext
             entity.Property(e => e.Colors)
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasDefaultValue("[]")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_Products_COLORS")
                 .HasColumnName("COLORS");
             entity.Property(e => e.Description)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("DESCRIPTION");
             entity.Property(e => e.ImageUrl)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasMaxLength(255)
+                .IsUnicode(true)
                 .HasColumnName("IMAGE_URL");
             entity.Property(e => e.Price).HasColumnName("PRICE");
             entity.Property(e => e.ProductName)
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("PRODUCT_NAME");
             entity.Property(e => e.Toptext)
 
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasDefaultValue(" ")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_Products_TOPTEXT")
                 .HasColumnName("TOPTEXT");
@@ -169,11 +169,11 @@ public partial class dbSHOPContext : DbContext
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.Address)
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("address");
             entity.Property(e => e.City)
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("city");
             entity.Property(e => e.Phon)
                 .HasMaxLength(10)
@@ -193,15 +193,15 @@ public partial class dbSHOPContext : DbContext
                 .HasColumnName("userEmail");
             entity.Property(e => e.UserFirstName)
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("userFirstName");
             entity.Property(e => e.UserLastName)
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasColumnName("userLastName");
             entity.Property(e => e.UserPassword)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasMaxLength(70)
+                .IsUnicode(true)
                 .HasColumnName("userPassword");
         });
 

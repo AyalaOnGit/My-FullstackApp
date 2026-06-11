@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "${SQL_PASSWORD}"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./sql-init:/init
+    command: /bin/bash -c "/opt/mssql/bin/sqlservr & until /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${SQL_PASSWORD}' -C -Q 'SELECT 1' > /dev/null 2>&1; do echo 'Waiting for SQL Server...'; sleep 5; done && /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${SQL_PASSWORD}' -C -Q \"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'API_SHOP') CREATE DATABASE [API_SHOP]\" && /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${SQL_PASSWORD}' -C -d API_SHOP -i /init/init.sql && /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${SQL_PASSWORD}' -C -d API_SHOP -i /init/data.sql && wait"
+
   redis:
     image: redis:alpine
     command: redis-server --requirepass yourpassword
@@ -43,16 +55,18 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Ayal=YOUR_DB_CONNECTION_STRING
+      - ConnectionStrings__Ayal=Data Source=sqlserver;Initial Catalog=API_SHOP;User ID=sa;Password=${SQL_PASSWORD};Trust Server Certificate=True
       - ConnectionStrings__Redis=redis:6379,password=yourpassword
       - Kafka__BootstrapServers=kafka:9092
       - Kafka__OrderTopic=orders
       - Jwt__Key=GiftForU-SecretKey-2026-SuperSecure!
       - Jwt__Issuer=GiftForU
       - Jwt__Audience=GiftForUUsers
+      - AiService__BaseUrl=http://ai_service:8001
     depends_on:
       - redis
       - kafka
+      - sqlserver
 
   consumer:
     build:
@@ -64,5 +78,24 @@ services:
     depends_on:
       - kafka
 
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+
+  ai_service:
+    build:
+      context: ../ai_service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
 volumes:
   redis_data:
+  sqlserver_data:

@@ -12,12 +12,12 @@
 ## 🏗️ ארכיטקטורה
 
 ```
-Angular (frontend)
-    ↕ HTTP (CORS)
+Angular (frontend) — nginx proxy
+    ↕ /api/*
 .NET 9 WebAPIShop (backend)
-    ↕ EF Core          ↕ Redis cache      ↕ Kafka
-  SQL Server        localhost:6379     localhost:9093
-    ↕ HTTP proxy
+    ↕ EF Core       ↕ Redis cache    ↕ Kafka (KafkaProducerService)
+  SQL Server      redis:6379       kafka:9092
+    ↕ HTTP
 Python FastAPI (ai_service) ← OpenAI
 ```
 
@@ -27,17 +27,21 @@ Python FastAPI (ai_service) ← OpenAI
 
 ```text
 ├── frontend/           # Angular 21
+│   ├── Dockerfile      # Multi-stage: Node build + nginx serve
+│   └── nginx.conf      # Proxy /api/ ו-/productsImages/ לבאקאנד
 ├── backend/
 │   ├── WebAPIShop/     # Entry point, controllers, middleware
-│   ├── Servers/        # Business logic (Services layer)
+│   ├── Servers/        # Business logic — כולל KafkaProducerService
 │   ├── Repository/     # Data access
 │   ├── Entitys/        # EF Core domain models
 │   ├── DTOs/           # Record-based DTOs
 │   ├── KafkaConsumer/  # Worker service — מאזין להזמנות
 │   ├── TestProject1/   # xUnit tests
+│   ├── sql-init/       # init.sql + init.sh — טעינת DB אוטומטית
 │   ├── Dockerfile
 │   └── docker-compose.yml
 └── ai_service/         # Python FastAPI — Maya AI + Semantic Search
+    └── Dockerfile
 ```
 
 ---
@@ -50,7 +54,7 @@ Python FastAPI (ai_service) ← OpenAI
 | **Role-based Auth** | `[Authorize]` למשתמש מחובר, `[AdminOnly]` למנהל מערכת |
 | **Rate Limiting** | Sliding Window — 30 בקשות/דקה לפי IP+User |
 | **Redis Cache** | GET עם TTL מ-config, invalidation בכל שינוי |
-| **Kafka** | הזמנות חדשות נשלחות ל-topic `orders`, KafkaConsumer מאזין |
+| **Kafka** | `KafkaProducerService` (Singleton) שולח הזמנות ל-topic `orders`, KafkaConsumer מאזין ומדפיס ללוג |
 | **NLog** | לוגים מפורטים לקובץ JSON |
 | **Global Error Handling** | Middleware שתופס כל exception ומחזיר 500 עם לוג |
 | **Traffic Monitoring** | כל בקשה נרשמת לטבלת RATING |
@@ -73,17 +77,17 @@ cd backend
 docker compose up -d redis kafka kafka-ui
 ```
 
-### 2. .NET Backend
-```bash
-cd backend/WebAPIShop
-dotnet run
-```
-
-### 3. Python AI Service
+### 2. Python AI Service
 ```bash
 cd ai_service
 pip install -r requirements.txt
 uvicorn chat_service:app --port 8001 --reload
+```
+
+### 3. .NET Backend
+```bash
+cd backend/WebAPIShop
+dotnet run
 ```
 
 ### 4. Angular Frontend
@@ -93,7 +97,7 @@ npm install
 ng serve
 ```
 
-> **חשוב:** Python חייב לרוץ לפני .NET (טעינת embeddings בעליית השרת).
+> **חשוב:** Python חייב לרוץ לפני .NET — הבאקאנד טוען את ה-embeddings בעליית השרת.
 
 ---
 
@@ -105,9 +109,14 @@ docker compose up --build
 ```
 
 שירותים:
+- Frontend: `http://localhost:4200`
 - API: `http://localhost:8080`
+- AI Service: `http://localhost:8001`
 - Kafka UI: `http://localhost:8090`
 - Redis: `localhost:6379`
+- SQL Server: `localhost:1433`
+
+> **הערה:** צור קובץ `backend/.env` לפי `backend/.env.example` לפני ההרצה.
 
 ---
 

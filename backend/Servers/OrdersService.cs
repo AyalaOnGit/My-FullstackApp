@@ -45,7 +45,8 @@ public class OrdersService : IOrdersService
 
         Order o = _mapper.Map<OrderDTO, Order>(order);
         OrderDTO createdOrder = _mapper.Map<Order, OrderDTO>(await _orderRepository.AddOrder(o));
-        await _kafkaProducer.PublishOrderCreatedAsync(createdOrder);
+        try { await _kafkaProducer.PublishOrderCreatedAsync(createdOrder); }
+        catch (Exception ex) { _logger.LogWarning("Kafka unavailable, order saved without event: {Message}", ex.Message); }
         return createdOrder;
     }
 

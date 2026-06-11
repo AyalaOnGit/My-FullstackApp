@@ -44,9 +44,10 @@
               </div>
   
               <button pButton pRipple (click)="processOrder()" 
+                      [disabled]="isLoading"
                       class="w-full shadow-2 custom-checkout-btn mb-3">
                 <span class="w-full text-center font-bold text-lg">
-                  אשר תשלום בסך {{totalPrice | currency:'ILS'}}
+                  {{ isLoading ? 'מעבד הזמנה...' : 'אשר תשלום בסך ' + (totalPrice | currency:'ILS') }}
                 </span>
               </button>
   

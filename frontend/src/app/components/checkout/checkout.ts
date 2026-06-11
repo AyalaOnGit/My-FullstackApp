@@ -42,6 +42,7 @@ export class CheckoutComponent implements OnInit {
   // זה המשתנה שה-HTML שלך מחפש:
   totalPrice = this.cartService.getTotalSum();
   // האובייקט שקשור לטופס האשראי ב-HTML
+  isLoading = false;
   paymentDetails = {
     fullName: '',
     cardNumber: '',
@@ -86,26 +87,28 @@ export class CheckoutComponent implements OnInit {
     };
   
     // הוספת "as any" כדי לפתור את שגיאת ה-ts(2345)
+    this.isLoading = true;
     this.orderService.addOrder(newOrder as any).subscribe({
-      next: (response) => {
+      next: () => {
+        this.isLoading = false;
         Swal.fire({
           title: 'הזמנתך התקבלה!',
           text: 'תודה שקנית אצלנו',
           icon: 'success',
-          iconColor: '#46d9e1',          // ה-V בטורקיז
-          confirmButtonColor: '#46d9e1', // הכפתור בטורקיז
+          iconColor: '#46d9e1',
+          confirmButtonColor: '#46d9e1',
           confirmButtonText: 'מעולה'
         }).then(() => {
           this.cartService.clearCart();
           this.router.navigate(['/home']);
         });
       },
-      error: (err) => {
-        console.error('Order Error:', err);
+      error: () => {
+        this.isLoading = false;
         Swal.fire({
-          title: 'שגיאה',
-          text: 'לא הצלחנו לשמור את ההזמנה. ודאו שכל הפרטים תקינים.',
-          icon: 'error',
+          title: 'אירעה שגיאה טכנית',
+          text: 'ייתכן שההזמנה בוצעה — בדקי את היסטוריית ההזמנות לפני שתנסי שוב.',
+          icon: 'warning',
           confirmButtonColor: '#46d9e1'
         });
       }

@@ -19,7 +19,8 @@ public class KafkaProducerService : IKafkaProducerService, IDisposable
 
         var config = new ProducerConfig
         {
-            BootstrapServers = configuration["Kafka:BootstrapServers"]
+            BootstrapServers = configuration["Kafka:BootstrapServers"],
+            MessageTimeoutMs = 3000
         };
 
         _producer = new ProducerBuilder<string, string>(config).Build();
@@ -41,5 +42,9 @@ public class KafkaProducerService : IKafkaProducerService, IDisposable
             order.UserId, order.OrderId, order.OrderSum);
     }
 
-    public void Dispose() => _producer?.Dispose();
+    public void Dispose()
+    {
+        try { _producer?.Flush(TimeSpan.FromSeconds(1)); } catch { }
+        _producer?.Dispose();
+    }
 }

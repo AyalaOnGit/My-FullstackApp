@@ -12,7 +12,7 @@ export class UserService {
   private apiUrl = `${environment.apiUrl}/Users`;
 
   // טעינה ראשונית מה-LocalStorage
-  currentUser = signal<UserDTO | null>(this.getSavedUser());
+  currentUser = signal<UserDTO | null>(null);
 
   // מחושב - תמיד יתעדכן כש-currentUser משתנה
   isAdmin = computed(() => {
@@ -20,7 +20,9 @@ export class UserService {
     return u?.role === 'admin' || (u as any)?.Role === 'admin';
   });
 
-  constructor() { }
+  constructor() {
+    localStorage.removeItem('loggedUser');
+  }
 
   /**
    * הרשמה

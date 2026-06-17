@@ -9,19 +9,41 @@
       Maya
       <small class="subtitle">יועצת מתנות אישית</small>
     </span>
+    <button class="camera-btn" (click)="toggleCamera()" [title]="cameraActive ? 'כבי מצלמה' : 'בחני תגובת המקבל 📸'">
+      {{ cameraActive ? '📷✕' : '📸' }}
+    </button>
   </div>
 
-  <div class="chat-messages">
-    <div *ngFor="let m of messages" [class]="'msg ' + m.role">
-      <span *ngIf="m.role === 'user'">{{ m.content }}</span>
-      <span *ngIf="m.role === 'assistant'" [innerHTML]="m.html || m.content"></span>
+  <div class="tabs">
+    <button [class.active]="activeTab === 'chat'" (click)="activeTab = 'chat'">💬 שיחה</button>
+    <button [class.active]="activeTab === 'mirror'" (click)="activeTab = 'mirror'">🪞 מראת רגשות</button>
+  </div>
+
+  <div class="tab-content" [class.hidden]="activeTab !== 'chat'">
+    <div class="chat-messages">
+      <div *ngFor="let m of messages" [class]="'msg ' + m.role">
+        <span *ngIf="m.role === 'user'">{{ m.content }}</span>
+        <span *ngIf="m.role === 'assistant'" [innerHTML]="m.html || m.content"></span>
+      </div>
+      <div *ngIf="loading" class="msg assistant">כותבת...</div>
     </div>
-    <div *ngIf="loading" class="msg assistant">כותבת...</div>
+    <div class="chat-input">
+      <canvas #canvasEl style="display:none"></canvas>
+      <video #videoEl autoplay playsinline muted [style.display]="cameraActive ? 'block' : 'none'" width="1" height="1" (canplay)="videoReady = true"></video>
+      <div class="input-wrapper">
+        <textarea [(ngModel)]="input" (keydown)="onKey($event)"
+            [style.backgroundColor]="emotionColor(currentEmotion)"
+            placeholder="שאלי את מאיה..."></textarea>
+        <span class="emoji-suggestion" *ngIf="currentEmoji">{{ currentEmoji }} <small>TAB</small></span>
+      </div>
+      <button (click)="send()" [disabled]="loading">שלח</button>
+    </div>
   </div>
 
-  <div class="chat-input">
-    <textarea [(ngModel)]="input" (keydown)="onKey($event)"
-              placeholder="שאלי את מאיה..."></textarea>
-    <button (click)="send()" [disabled]="loading">שלח</button>
+  <div class="tab-content mirror-tab" [class.hidden]="activeTab !== 'mirror'">
+    <div class="mirror-emoji">{{ currentEmoji || '😐' }}</div>
+    <div class="mirror-label">{{ currentEmotion || 'neutral' }}</div>
+    <canvas #chartEl class="emotion-chart"></canvas>
+    <p class="mirror-hint" *ngIf="!cameraActive">הפעילי מצלמה 📸 כדי להתחיל</p>
   </div>
 </div>

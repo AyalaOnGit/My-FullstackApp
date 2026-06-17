@@ -16,4 +16,10 @@ export class ChatService {
   search(query: string) {
     return this.http.post<{ results: any[] }>(this.searchUrl, { query });
   }
+
+  analyzeEmotion(imageBase64: string) {
+    return this.http.post<{ emotion: string; scores: Record<string, number> }>(
+      `${this.apiUrl}/analyze-emotion`, { image: imageBase64 }
+    );
+  }
 }

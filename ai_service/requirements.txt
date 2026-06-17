@@ -3,3 +3,5 @@ uvicorn
 openai
 python-dotenv
 numpy
+deepface
+opencv-python

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
@@ -6,13 +6,23 @@ from dotenv import load_dotenv
 import os
 import numpy as np
 import httpx
+import certifi
+import asyncio
+import logging
 
 load_dotenv()
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=['*'],
                    allow_methods=['*'], allow_headers=['*'])
 
-http_client = httpx.Client(verify=False)
+# basic logging
+logging.basicConfig(level=logging.INFO)
+
+# Default to disabling TLS verification to maintain previous working behaviour
+# Set DEV_INSECURE_TLS=0 to enforce certificate verification with certifi bundle
+dev_insecure = os.getenv('DEV_INSECURE_TLS', '1') in ('1', 'true', 'True')
+verify_target = False if dev_insecure else certifi.where()
+http_client = httpx.Client(verify=verify_target)
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'), http_client=http_client)
 
 SYSTEM_PROMPT = (
@@ -132,6 +142,59 @@ async def cache_products(req: CacheRequest):
         text = f"{p.get('name', '')} {p.get('description', '')}"
         product_embeddings_cache[key] = get_embedding(text)
     return {'cached': len(product_embeddings_cache)}
+
+# ── EMOTION ENDPOINT ────────────────────────────────────────
+class EmotionRequest(BaseModel):
+    image: str  # base64
+
+@app.post('/analyze-emotion')
+async def analyze_emotion(req: EmotionRequest):
+    try:
+        logging.info('analyze-emotion: received request')
+        from deepface import DeepFace
+        import base64, cv2
+        b64 = req.image
+        logging.info('analyze-emotion: image field type=%s', type(b64))
+        # strip data URI prefix if present
+        if isinstance(b64, str) and b64.startswith('data:'):
+            comma = b64.find(',')
+            if comma != -1:
+                b64 = b64[comma+1:]
+
+        logging.info('analyze-emotion: base64 length=%d', len(b64) if b64 else 0)
+
+        img_data = base64.b64decode(b64)
+        np_arr = np.frombuffer(img_data, np.uint8)
+        img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+        # run DeepFace in a thread to avoid blocking the event loop
+        # pass actions and enforce_detection as kwargs (not as a single dict)
+        result = await asyncio.to_thread(
+            DeepFace.analyze, img, actions=['emotion'], enforce_detection=False
+        )
+
+        # DeepFace may return a dict or a list; normalize
+        if isinstance(result, list):
+            res = result[0]
+        else:
+            res = result
+
+        emotion = str(res.get('dominant_emotion', 'neutral'))
+        raw_scores = res.get('emotion', {}) or {}
+        # convert numpy types to native Python types for JSON serialization
+        scores: dict = {}
+        for k, v in raw_scores.items():
+            try:
+                scores[k] = float(v)
+            except Exception:
+                try:
+                    scores[k] = float(np.array(v).item())
+                except Exception:
+                    scores[k] = v
+        return {'emotion': emotion, 'scores': scores}
+    except Exception as e:
+        logging.exception('analyze-emotion: exception')
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ── SEARCH ENDPOINT ──────────────────────────────────────────
 @app.post('/search')

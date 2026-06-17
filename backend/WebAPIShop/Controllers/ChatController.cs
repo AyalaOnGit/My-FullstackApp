@@ -44,9 +44,23 @@ namespace WebAPIShop.Controllers
             var data = await res.Content.ReadFromJsonAsync<ChatResponse>();
             return Ok(data);
         }
+
+        [HttpPost("analyze-emotion")]
+        public async Task<IActionResult> AnalyzeEmotion([FromBody] EmotionRequest req)
+        {
+            var res = await _http.PostAsJsonAsync("http://localhost:8001/analyze-emotion", req);
+            var body = await res.Content.ReadAsStringAsync();
+            // Forward AI service status and body to aid debugging (preserve content type if possible)
+            if (!res.IsSuccessStatusCode)
+            {
+                return StatusCode((int)res.StatusCode, body);
+            }
+            return Content(body, "application/json");
+        }
     }
 
     public record ChatRequest(string Message, List<HistoryItem> History);
     public record HistoryItem(string Role, string Content);
     public record ChatResponse(string Reply);
+    public record EmotionRequest(string Image);
 }
